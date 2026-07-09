@@ -2,34 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
 use App\Models\Category;
-use App\Models\User;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class MenuController extends Controller
 {
-    public function getProducts()
-    {
-        return response()->json([
-            'status' => 'success',
-            'data' => Product::all()
-        ]);
-    }
-
     public function getCategories()
     {
-        return response()->json([
-            'status' => 'success',
-            'data' => Category::all()
-        ]);
+        $categories = Category::all();
+        return response()->json(['status' => 'success', 'data' => $categories]);
+    }
+
+    public function getProducts()
+    {
+        $products = Product::all();
+        return response()->json(['status' => 'success', 'data' => $products]);
     }
 
     public function getUser()
     {
-        return response()->json([
-            'status' => 'success',
-            'data' => User::first()
-        ]);
+        return response()->json(['status' => 'success', 'data' => ['name' => 'Kemal Polat']]);
     }
 }
