@@ -116,9 +116,8 @@ class AdminController extends Controller
     public function deleteProduct($id)
     {
         $product = Product::findOrFail($id);
-
-        if ($product->image_url && \Illuminate\Support\Facades\File::exists(public_path($product->image_url))) {
-            \Illuminate\Support\Facades\File::delete(public_path($product->image_url));
+        if ($product->image_url && File::exists(public_path($product->image_url))) {
+            File::delete(public_path($product->image_url));
         }
 
         $product->delete();
