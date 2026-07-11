@@ -298,61 +298,6 @@
                 </div>
             </div>
 
-            <div id="view-profile" class="page-view px-6">
-                <div class="flex flex-col items-center mt-4">
-                    <div class="relative">
-                        <div class="w-36 h-36 rounded-full bg-gray-200 overflow-hidden border-4 border-white shadow-md">
-                            <img src="images/profil.jpg" alt="Profile" class="w-full h-full object-cover">
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-2 mt-4">
-                        <h2 id="profile-name" class="text-2xl font-medium text-brand-text">Yükleniyor...</h2>
-                        <i class="fa-regular fa-pen-to-square text-gray-400 text-sm cursor-pointer"></i>
-                    </div>
-                    <p class="text-gray-500 mt-1">Hesabım</p>
-                </div>
-
-                <div class="grid grid-cols-3 gap-4 mt-8">
-                    <div
-                        class="bg-white rounded-2xl p-4 flex flex-col items-center justify-center shadow-sm cursor-pointer">
-                        <i class="fa-regular fa-file-lines text-3xl mb-2 text-brand-text"></i>
-                        <span class="text-xs font-medium">Siparişlerim</span>
-                    </div>
-                    <div
-                        class="bg-white rounded-2xl p-4 flex flex-col items-center justify-center shadow-sm cursor-pointer">
-                        <i class="fa-regular fa-heart text-3xl mb-2 text-brand-text"></i>
-                        <span class="text-xs font-medium">Favoriler</span>
-                    </div>
-                    <div
-                        class="bg-white rounded-2xl p-4 flex flex-col items-center justify-center shadow-sm cursor-pointer">
-                        <i class="fa-solid fa-location-dot text-3xl mb-2 text-brand-text"></i>
-                        <span class="text-xs font-medium">Adreslerim</span>
-                    </div>
-                </div>
-
-                <h3 class="font-bold text-sm mt-8 mb-4">Daha Fazla</h3>
-                <div class="flex flex-col">
-                    <div class="flex justify-between items-center py-4 border-b border-gray-200 cursor-pointer">
-                        <div class="flex items-center gap-3">
-                            <i class="fa-regular fa-circle-question text-xl"></i>
-                            <span class="font-medium">Yardım Merkezi</span>
-                        </div>
-                        <i class="fa-solid fa-chevron-right text-gray-400"></i>
-                    </div>
-                    <div class="flex justify-between items-center py-4 border-b border-gray-200 cursor-pointer">
-                        <div class="flex items-center gap-3">
-                            <i class="fa-solid fa-gear text-xl"></i>
-                            <span class="font-medium">Ayarlar</span>
-                        </div>
-                        <i class="fa-solid fa-chevron-right text-gray-400"></i>
-                    </div>
-                </div>
-
-                <button
-                    class="w-full mt-8 border-2 border-black rounded-xl py-3 font-semibold hover:bg-black hover:text-white transition-colors">Çıkış
-                    Yap</button>
-            </div>
-
         </main>
 
         <nav
@@ -372,10 +317,9 @@
                 data-target="history">
                 <i class="fa-regular fa-clock text-lg mb-0.5"></i><span>History</span>
             </button>
-            <button onclick="switchView('profile')"
-                class="nav-btn flex flex-col items-center gap-1 hover:text-brand-gold transition-colors"
-                data-target="profile">
-                <i class="fa-regular fa-user text-lg mb-0.5"></i><span>Profile</span>
+            <button onclick="window.location.href='/admin'"
+                class="nav-btn flex flex-col items-center gap-1 hover:text-brand-gold transition-colors text-gray-500">
+                <i class="fa-solid fa-user-lock text-lg mb-0.5"></i><span>Admin</span>
             </button>
         </nav>
 
@@ -392,10 +336,14 @@
                 <div class="flex justify-between items-start mb-2">
                     <h2 id="modal-title" class="text-3xl font-serif font-semibold text-gray-900 leading-tight">
                         Yükleniyor...</h2>
-                    <span id="modal-price" class="text-brand-gold font-bold text-xl mt-1">₺0</span>
                 </div>
 
-                <div class="flex items-center gap-4 text-xs text-gray-500 mb-5">
+                <div class="flex flex-wrap items-center gap-3 text-xs text-gray-500 mb-5">
+                    <div
+                        class="flex items-center gap-1 bg-[#8C6C47] text-white px-3 py-1.5 rounded-lg shadow-sm font-bold text-base">
+                        <span id="modal-price">₺0</span>
+                    </div>
+
                     <div
                         class="flex items-center gap-1 bg-white border border-gray-200 px-2.5 py-1.5 rounded-lg shadow-sm">
                         <i class="fa-solid fa-star text-yellow-500 text-[10px]"></i>
@@ -414,6 +362,29 @@
                 <p id="modal-desc" class="text-sm text-gray-600 mb-6 leading-relaxed">Detaylar yükleniyor...</p>
 
                 <div class="w-full h-px bg-gray-200 mb-6"></div>
+
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="font-bold text-gray-800 text-lg">İçecek Seçimi</h3>
+                    <span
+                        class="bg-gray-200 text-gray-600 text-[10px] uppercase font-bold tracking-wider px-2 py-1 rounded-md">Opsiyonel</span>
+                </div>
+                <div class="flex flex-col gap-3 mb-8">
+                    <label
+                        class="flex justify-between items-center cursor-pointer bg-white border border-gray-100 p-3.5 rounded-xl shadow-sm hover:border-brand-gold transition-colors">
+                        <span class="font-medium text-sm text-gray-800">Kutu Kola (+₺60)</span>
+                        <input type="checkbox" name="icecek" value="kola" class="w-4 h-4 rounded">
+                    </label>
+                    <label
+                        class="flex justify-between items-center cursor-pointer bg-white border border-gray-100 p-3.5 rounded-xl shadow-sm hover:border-brand-gold transition-colors">
+                        <span class="font-medium text-sm text-gray-800">Ayran (+₺35)</span>
+                        <input type="checkbox" name="icecek" value="ayran" class="w-4 h-4 rounded">
+                    </label>
+                    <label
+                        class="flex justify-between items-center cursor-pointer bg-white border border-gray-100 p-3.5 rounded-xl shadow-sm hover:border-brand-gold transition-colors">
+                        <span class="font-medium text-sm text-gray-800">Su (+₺15)</span>
+                        <input type="checkbox" name="icecek" value="su" class="w-4 h-4 rounded">
+                    </label>
+                </div>
 
                 <div class="flex justify-between items-center mb-3">
                     <h3 class="font-bold text-gray-800 text-lg">Sos Seçimi</h3>
