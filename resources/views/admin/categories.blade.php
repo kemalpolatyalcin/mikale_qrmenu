@@ -30,6 +30,11 @@
             </div>
 
             <nav class="px-4 space-y-2">
+                <a href="{{ url('/') }}" target="_blank"
+                    class="flex items-center gap-3 px-4 py-3 text-[#8C6C47] bg-amber-50 hover:bg-amber-100 rounded-xl transition-all mb-4 border border-amber-100 shadow-sm">
+                    <i class="fa-solid fa-arrow-up-right-from-square w-5 text-center"></i>
+                    <span class="font-medium text-sm">Menüyü Görüntüle</span>
+                </a>
                 <a href="{{ route('admin.dashboard') }}"
                     class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-[#8C6C47] rounded-xl transition-all">
                     <i class="fa-solid fa-chart-pie w-5 text-center"></i>
@@ -65,7 +70,7 @@
         </div>
     </aside>
 
-    <main class="flex-1 flex flex-col h-screen overflow-hidden">
+    <main class="flex-1 flex flex-col h-screen overflow-hidden relative">
         <header
             class="h-20 bg-white/80 backdrop-blur-md flex items-center justify-between px-8 shadow-sm z-10 shrink-0">
             <h2 class="text-xl font-semibold text-gray-800">Kategori Yönetimi</h2>
@@ -82,6 +87,16 @@
             @if(session('success'))
                 <div class="bg-green-50 text-green-700 p-4 rounded-xl mb-6 flex items-center gap-3 border border-green-200">
                     <i class="fa-solid fa-circle-check"></i> {{ session('success') }}
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div class="bg-red-50 text-red-700 p-4 rounded-xl mb-6 border border-red-200">
+                    <ul class="list-disc list-inside text-sm">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
                 </div>
             @endif
 
@@ -134,7 +149,9 @@
                                         </td>
                                         <td class="p-4 font-medium text-gray-800">{{ $category->name }}</td>
                                         <td class="p-4 text-right space-x-2">
-                                            <button onclick="alert('Düzenleme ID: {{ $category->id }}')"
+
+                                            <button
+                                                onclick="openEditModal({{ $category->id }}, '{{ addslashes($category->name) }}')"
                                                 class="w-8 h-8 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white transition-colors">
                                                 <i class="fa-solid fa-pen text-xs"></i>
                                             </button>
@@ -160,8 +177,62 @@
                 </div>
             </div>
         </div>
+
+        <div id="edit-modal"
+            class="absolute inset-0 bg-black/60 hidden items-center justify-center z-50 backdrop-blur-sm">
+            <div class="bg-white rounded-3xl p-8 w-full max-w-md mx-4 shadow-2xl relative">
+
+                <button onclick="closeEditModal()"
+                    class="absolute top-6 right-6 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-gray-500 hover:bg-red-50 hover:text-red-500 transition-colors">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+                <h3 class="text-xl font-semibold text-gray-800 mb-6">Kategoriyi Düzenle</h3>
+
+                <form id="edit-form" method="POST" enctype="multipart/form-data" class="space-y-5">
+                    @csrf
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Kategori Adı</label>
+                        <input type="text" id="edit-name" name="name" required
+                            class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#8C6C47] focus:border-[#8C6C47] outline-none transition-all text-sm">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Yeni Görsel Seçin</label>
+                        <input type="file" name="image" accept="image/*"
+                            class="w-full px-4 py-2 rounded-xl border border-gray-300 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-amber-50 file:text-[#8C6C47] hover:file:bg-amber-100 transition-all cursor-pointer">
+                        <p class="text-[11px] text-gray-400 mt-2"><i class="fa-solid fa-circle-info mr-1"></i>Eğer yeni
+                            bir görsel seçmezseniz mevcut görsel kullanılmaya devam eder.</p>
+                    </div>
+
+                    <button type="submit"
+                        class="w-full bg-[#8C6C47] text-white font-medium py-3.5 rounded-xl hover:bg-[#7a5e3e] transition-colors mt-2 shadow-md">
+                        Değişiklikleri Kaydet
+                    </button>
+                </form>
+            </div>
+        </div>
+
     </main>
 
+    <script>
+        function openEditModal(id, currentName) {
+
+            const form = document.getElementById('edit-form');
+            form.action = `/admin/categories/update/${id}`;
+
+            document.getElementById('edit-name').value = currentName;
+
+            const modal = document.getElementById('edit-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+        function closeEditModal() {
+            const modal = document.getElementById('edit-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+    </script>
 </body>
 
 </html>
