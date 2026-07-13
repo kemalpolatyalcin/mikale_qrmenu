@@ -130,7 +130,7 @@
 
                 <div class="lg:col-span-2">
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                        <table class="w-full text-left border-collapse">
+                        <table class="min-w-full">
                             <thead>
                                 <tr class="bg-gray-50 border-b border-gray-100">
                                     <th class="p-4 text-sm font-semibold text-gray-600">Görsel</th>

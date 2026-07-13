@@ -122,7 +122,7 @@
 
                 <div class="lg:col-span-2">
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                        <table class="w-full text-left border-collapse">
+                        <table class="min-w-full">
                             <thead class="bg-gray-50 border-b border-gray-100">
                                 <tr>
                                     <th class="p-4 text-xs font-semibold text-gray-600">Ürün</th>

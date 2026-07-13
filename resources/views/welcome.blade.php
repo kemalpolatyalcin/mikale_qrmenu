@@ -3,45 +3,25 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mikale Food Menu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mikale | Dijital Menü</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link
-        href="https://fonts.googleapis.com/css2?family=Allison&family=Playfair+Display:ital,wght@1,600&family=Inter:wght@400;500;600&family=Poppins:wght@300;400&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Allison&family=Playfair+Display:ital,wght@1,600&family=Inter:wght@400;500;600&family=Poppins:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: {
-                        brand: {
-                            bg: '#F9F8F3',
-                            gold: '#8C6C47',
-                            text: '#1C1C1C'
-                        }
-                    }
+                    colors: { brand: { bg: '#FDFCF8', gold: '#A88753', dark: '#1A1A1A', gray: '#8E8E8E' } },
+                    fontFamily: { sans: ['Poppins', 'sans-serif'], serif: ['Playfair Display', 'serif'], script: ['Allison', 'cursive'] },
+                    boxShadow: { 'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)' }
                 }
             }
         }
     </script>
     <style>
-        .font-allison {
-            font-family: 'Allison', cursive;
-        }
-
-        .font-serif {
-            font-family: 'Playfair Display', serif;
-        }
-
-        .font-sans {
-            font-family: 'Inter', sans-serif;
-        }
-
-        .font-poppins {
-            font-family: 'Poppins', sans-serif;
-        }
-
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
@@ -51,105 +31,78 @@
             scrollbar-width: none;
         }
 
-        @keyframes scaleFadeIn {
-            0% {
-                transform: scale(0.8);
-                opacity: 0;
-            }
-
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes slideRight {
-            0% {
-                transform: translateX(-100%) translateY(-20px);
-                opacity: 0;
-            }
-
-            100% {
-                transform: translateX(0) translateY(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes slideLeft {
-            0% {
-                transform: translateX(100%) translateY(20px);
-                opacity: 0;
-            }
-
-            100% {
-                transform: translateX(0) translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .anim-stripe-top {
-            animation: slideRight 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-        }
-
-        .anim-stripe-bottom {
-            animation: slideLeft 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-        }
-
-        .anim-logo {
-            animation: scaleFadeIn 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-        }
-
-        .animate-fade-in-up {
-            animation: fadeInUp 0.5s ease-out forwards;
-            opacity: 0;
-        }
-
         .page-view {
             display: none;
-            animation: scaleFadeIn 0.3s ease-out forwards;
+            opacity: 0;
         }
 
         .page-view.active {
             display: block;
+            animation: simpleFade 0.3s ease-out forwards;
         }
 
-        .bottom-sheet {
-            position: absolute;
-            bottom: -100%;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #F9F8F3;
-            transition: bottom 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-            z-index: 60;
+        @keyframes simpleFade {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal-container {
+            position: fixed;
+            z-index: 70;
+            background: #FFF;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
+            will-change: transform;
         }
 
-        .bottom-sheet.open {
-            bottom: 0;
+        @media (max-width: 767px) {
+            .modal-container {
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 85vh;
+                border-radius: 1.5rem 1.5rem 0 0;
+                transform: translateY(100%);
+                transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            }
+
+            .modal-container.open {
+                transform: translateY(0);
+            }
+        }
+
+        @media (min-width: 768px) {
+            .modal-container {
+                top: 50%;
+                left: 50%;
+                width: 100%;
+                max-width: 800px;
+                height: auto;
+                max-height: 90vh;
+                border-radius: 1.5rem;
+                opacity: 0;
+                pointer-events: none;
+                transform: translate(-50%, -45%);
+                transition: transform 0.3s ease, opacity 0.3s ease;
+            }
+
+            .modal-container.open {
+                transform: translate(-50%, -50%);
+                opacity: 1;
+                pointer-events: auto;
+            }
         }
 
         .overlay {
-            position: absolute;
+            position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.6);
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s;
-            z-index: 55;
+            transition: opacity 0.3s ease;
+            z-index: 60;
         }
 
         .overlay.open {
@@ -159,308 +112,321 @@
 
         input[type="radio"],
         input[type="checkbox"] {
-            accent-color: #8C6C47;
+            accent-color: #A88753;
         }
     </style>
 </head>
 
-<body class="bg-gray-200 flex justify-center h-screen items-center font-sans">
+<body class="bg-brand-bg text-brand-dark font-sans antialiased pb-20 md:pb-0">
 
-    <div
-        class="w-full max-w-md h-full sm:h-[850px] bg-brand-bg relative overflow-hidden flex flex-col shadow-2xl sm:rounded-3xl">
+    <div id="splash-screen"
+        class="fixed inset-0 z-[100] bg-brand-bg flex justify-center items-center transition-opacity duration-300">
+        <div class="font-script text-[12rem] text-brand-gold animate-pulse">M</div>
+    </div>
 
-        <div id="splash-screen"
-            class="absolute inset-0 z-[100] bg-brand-bg flex justify-center items-center transition-opacity duration-700 ease-in-out">
-            <svg class="absolute top-[30%] left-0 w-full h-16 anim-stripe-top text-brand-gold" viewBox="0 0 1440 150"
-                preserveAspectRatio="none" fill="currentColor">
-                <path d="M0,60 C400,160 1000,-40 1440,60 L1440,85 C1000,-15 400,185 0,85 Z"></path>
-            </svg>
-            <div class="font-allison text-[8rem] text-black relative z-10 anim-logo pr-4 pt-4">M</div>
-            <svg class="absolute bottom-[30%] left-0 w-full h-16 anim-stripe-bottom text-brand-gold"
-                viewBox="0 0 1440 150" preserveAspectRatio="none" fill="currentColor">
-                <path d="M0,60 C400,160 1000,-40 1440,60 L1440,85 C1000,-15 400,185 0,85 Z"></path>
-            </svg>
+    <header class="fixed top-0 w-full z-50 bg-white/95 shadow-sm border-b border-gray-100 transition-all">
+        <div class="max-w-6xl mx-auto px-5 lg:px-8 h-16 md:h-20 flex justify-between items-center">
+
+            <div class="flex items-center gap-2 cursor-pointer" onclick="switchView('home')">
+                <span class="font-script text-4xl md:text-5xl text-brand-gold leading-none mt-2">M</span>
+                <span class="font-serif text-lg md:text-xl font-bold tracking-widest hidden sm:block">MIKALE</span>
+            </div>
+
+            <nav class="hidden md:flex items-center gap-8 font-medium text-sm text-brand-gray">
+                <button onclick="switchView('home')" class="nav-btn-desktop hover:text-brand-gold transition-colors"
+                    data-target="home" data-i18n="navHome">Ana Sayfa</button>
+                <button onclick="switchView('search')" class="nav-btn-desktop hover:text-brand-gold transition-colors"
+                    data-target="search" data-i18n="navSearch">Menü</button>
+                <button onclick="switchView('history')" class="nav-btn-desktop hover:text-brand-gold transition-colors"
+                    data-target="history" data-i18n="navHistory">Geçmiş</button>
+            </nav>
+
+            <div class="flex items-center gap-3 md:gap-5">
+                <div class="flex flex-col items-end mr-1 md:mr-2">
+                    <span class="text-[10px] text-brand-gray uppercase tracking-wider font-semibold"
+                        data-i18n="tableLabel">Masa</span>
+                    <span class="current-table-display text-sm font-bold text-brand-gold leading-none">-</span>
+                </div>
+
+                <div class="flex items-center bg-gray-50 rounded-lg p-1 border border-gray-100">
+                    <button
+                        class="btn-lang-tr px-2.5 py-1 rounded text-brand-dark font-semibold bg-white shadow-sm text-xs transition-all"
+                        onclick="changeLanguage('tr')">TR</button>
+                    <button
+                        class="btn-lang-en px-2.5 py-1 rounded text-brand-gray font-medium text-xs transition-all hover:text-brand-dark"
+                        onclick="changeLanguage('en')">EN</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="w-full min-h-screen">
+
+
+        <div id="view-home" class="page-view active w-full pt-16 md:pt-20">
+            <div
+                class="relative w-full h-[55vh] md:h-[65vh] rounded-b-[2.5rem] md:rounded-b-[4rem] overflow-hidden shadow-soft">
+                <img src="images/background.jpg" class="w-full h-full object-cover" alt="Mikale">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+
+                <div
+                    class="absolute bottom-0 left-0 w-full px-6 md:px-12 pb-20 md:pb-28 flex flex-col items-center text-center">
+                    <span
+                        class="text-brand-gold tracking-[0.2em] text-xs font-bold uppercase mb-3 drop-shadow-md">Mikale
+                        Restaurant</span>
+                    <h1 data-i18n="heroTitle"
+                        class="text-4xl md:text-6xl font-serif font-semibold text-white leading-tight mb-4 drop-shadow-lg">
+                        Harika Tatlar,<br>Güzel Anılar...</h1>
+                    <p data-i18n="heroDesc"
+                        class="text-sm md:text-base text-gray-200 font-light leading-relaxed max-w-xl mx-auto drop-shadow-md">
+                        Gelenekten ilham alan lezzetleri modern bir dokunuşla sunuyor, her ziyareti özel bir anıya
+                        dönüştürüyoruz.</p>
+                </div>
+            </div>
+
+            <div class="max-w-2xl mx-auto px-5 -mt-8 relative z-20">
+                <div class="bg-white p-2 rounded-full shadow-lg border border-gray-100 flex items-center cursor-pointer"
+                    onclick="switchView('search')">
+                    <div class="w-12 h-12 flex items-center justify-center text-brand-gold"><i
+                            class="fa-solid fa-magnifying-glass"></i></div>
+                    <input type="text" data-i18n-placeholder="search" placeholder="Lezzet arayın..."
+                        class="flex-1 bg-transparent border-none outline-none text-sm font-medium text-brand-dark pointer-events-none">
+                    <button
+                        class="bg-brand-dark text-white px-6 py-3 rounded-full text-sm font-medium hover:bg-brand-gold transition-colors hidden sm:block">
+                        <span data-i18n="navSearch">Menüye Git</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="mt-12 text-center text-gray-400 text-xs flex flex-col items-center gap-2 pb-8">
+                <i class="fa-solid fa-chevron-down animate-bounce"></i>
+                <span data-i18n="navSearch">Menüyü Keşfedin</span>
+            </div>
         </div>
 
-        <header id="main-header" class="hidden justify-between items-center px-6 pt-12 pb-4">
-            <div class="font-allison text-5xl text-black leading-none pt-2">M</div>
-            <div class="flex items-center gap-4 text-sm font-semibold">
-                <div class="bg-gray-200 text-gray-700 px-2 py-1 rounded text-xs font-bold shadow-sm">Masa: <span
-                        class="current-table-display">-</span></div>
-                <div class="text-gray-600">TR <span class="font-normal text-gray-400">|</span> EN</div>
-                <button class="text-xl"><i class="fa-solid fa-cart-shopping"></i></button>
-            </div>
-        </header>
+        <div id="view-search" class="page-view w-full max-w-6xl mx-auto px-5 lg:px-8 pt-24 md:pt-28 py-4 md:py-8">
 
-        <main class="flex-1 overflow-y-auto pb-24 no-scrollbar">
-
-            <div id="view-home" class="page-view active w-full">
-                <div class="relative w-full h-[420px]">
-                    <img src="images/background.jpg" class="w-full h-full object-cover" alt="">
-                    <div
-                        class="absolute inset-0 bg-gradient-to-t from-[#F9F8F3] from-10% via-[#F9F8F3]/80 via-45% to-black/20 to-90%">
-                    </div>
-
-                    <div class="absolute top-12 right-6 flex items-center gap-3 z-20">
-                        <div
-                            class="bg-black/50 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-bold shadow-sm border border-white/20">
-                            Masa: <span class="current-table-display">-</span>
-                        </div>
-                        <div class="bg-white text-black px-2 py-1 rounded text-xs font-bold shadow-sm">TR <span
-                                class="font-normal text-gray-400">|</span> EN</div>
-                        <button class="text-white text-xl drop-shadow-md"><i
-                                class="fa-solid fa-cart-shopping"></i></button>
-                    </div>
-
-                    <div class="absolute bottom-4 left-0 w-full text-center z-10 px-4">
-                        <h1 class="text-[31px] font-poppins font-light text-[#1C1C1C] leading-tight">Harika
-                            Tatlar,<br>Güzel Anılar...</h1>
-                    </div>
-                </div>
-
-                <svg class="w-full h-12 text-brand-gold -mt-6 relative z-10 drop-shadow-sm" viewBox="0 0 1440 150"
-                    preserveAspectRatio="none" fill="currentColor">
-                    <path d="M0,60 C400,160 1000,-40 1440,60 L1440,85 C1000,-15 400,185 0,85 Z"></path>
-                </svg>
-
-                <div class="flex flex-col items-center px-8 pt-6 pb-8 text-center bg-brand-bg">
-                    <div class="font-allison text-[7rem] leading-none text-black mb-6">M</div>
-                    <p class="text-[21px] font-poppins font-normal text-brand-text mb-10 leading-snug">
-                        Gelenekten ilham alan lezzetleri modern bir dokunuşla sunuyor, her ziyareti özel bir anıya
-                        dönüştürüyoruz
-                    </p>
-                    <div class="relative w-full max-w-sm cursor-pointer" onclick="switchView('search')">
-                        <i
-                            class="fa-solid fa-magnifying-glass absolute left-5 top-1/2 transform -translate-y-1/2 text-black text-lg"></i>
-                        <input type="text" placeholder="Arama...."
-                            class="w-full bg-white border border-gray-400 rounded-full py-4 pl-14 pr-4 focus:outline-none text-sm pointer-events-none text-black shadow-sm font-poppins font-normal">
-                    </div>
-                </div>
-            </div>
-
-            <div id="view-search" class="page-view px-6">
-                <div class="relative mb-6 mt-2">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
+                <h2 data-i18n="navSearch" class="font-serif text-3xl md:text-4xl font-semibold text-brand-dark">Menü
+                </h2>
+                <div class="relative w-full sm:w-72">
                     <i
-                        class="fa-solid fa-magnifying-glass absolute left-5 top-1/2 transform -translate-y-1/2 text-black text-lg"></i>
-                    <input type="text" placeholder="Arama...."
-                        class="w-full bg-white border border-gray-300 rounded-full py-3.5 pl-14 pr-4 focus:outline-none text-sm text-black shadow-sm font-poppins font-normal">
+                        class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    <input type="text" data-i18n-placeholder="search" placeholder="Lezzet arayın..."
+                        class="w-full bg-white border border-gray-200 rounded-full py-2.5 pl-11 pr-4 text-sm outline-none focus:border-brand-gold transition-colors shadow-sm">
                 </div>
-
-                <div id="category-list" class="flex flex-col gap-4 pb-4">
-                    <p class="text-center text-gray-500 py-4">Kategoriler yükleniyor...</p>
-                </div>
-
-                <div id="dynamic-product-list" class="hidden flex-col gap-4 mt-6 border-t border-gray-200 pt-6"></div>
             </div>
 
-            <div id="view-history" class="page-view px-6">
-                <div class="flex items-center gap-4 mb-6 mt-4">
-                    <h2 class="font-serif text-2xl mx-auto font-semibold">Sipariş Geçmişi</h2>
+            <div id="category-list" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5 pb-8">
+                <div class="col-span-full text-center py-10 text-brand-gray text-sm"><i
+                        class="fa-solid fa-spinner fa-spin mr-2"></i> <span data-i18n="loadingCats">Yükleniyor...</span>
+                </div>
+            </div>
+
+            <div id="dynamic-product-list" class="hidden flex-col pb-8"></div>
+        </div>
+
+
+        <div id="view-history" class="page-view w-full max-w-4xl mx-auto px-5 lg:px-8 pt-24 md:pt-28 py-8">
+            <h2 data-i18n="orderHistory" class="font-serif text-3xl md:text-4xl font-semibold mb-8 text-brand-dark">
+                Sipariş Geçmişi</h2>
+
+            <div class="bg-white rounded-[2rem] p-6 md:p-8 shadow-soft border border-gray-100">
+                <div class="flex justify-between items-center mb-8 pb-6 border-b border-gray-50">
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center text-brand-gold border border-gray-100">
+                            <i class="fa-solid fa-receipt"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-brand-gray uppercase tracking-wider font-semibold"
+                                data-i18n="tableLabel">Masa</p>
+                            <p class="current-table-display font-bold text-lg text-brand-dark leading-none">-</p>
+                        </div>
+                    </div>
+                    <span data-i18n="activeLabel"
+                        class="bg-green-50 border border-green-100 text-green-600 text-[10px] md:text-xs px-3 py-1.5 rounded-full font-semibold">Aktif
+                        Sipariş</span>
                 </div>
 
-                <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-                    <div class="flex justify-between items-center mb-4 border-b border-gray-100 pb-4">
-                        <div class="flex items-center gap-2">
-                            <div
-                                class="w-10 h-10 bg-brand-bg rounded-full flex items-center justify-center text-brand-gold">
-                                <i class="fa-solid fa-utensils"></i>
-                            </div>
+                <div id="history-items" class="flex flex-col gap-3">
+                    <div class="flex justify-between items-center bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                        <div class="flex items-center gap-4">
+                            <span
+                                class="w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center font-bold text-brand-dark text-xs">2x</span>
                             <div>
-                                <h3 class="font-bold text-brand-text">Masa <span class="current-table-display">-</span>
-                                </h3>
-                                <p class="text-[10px] text-gray-500">Güncel Oturum</p>
+                                <p class="font-medium text-brand-dark text-sm md:text-base">Cheddar Burger</p>
+                                <p class="text-[10px] text-brand-gray">Kola, Turşu</p>
                             </div>
                         </div>
-                        <span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded font-semibold">Aktif</span>
-                    </div>
-
-                    <div id="history-items" class="flex flex-col gap-3">
-                        <div class="flex justify-between items-center text-sm">
-                            <div class="flex items-center gap-2">
-                                <span class="font-semibold text-gray-700">2x</span>
-                                <span>Cheddar Burger</span>
-                            </div>
-                            <span class="font-semibold">₺450</span>
-                        </div>
-                        <div class="flex justify-between items-center text-sm">
-                            <div class="flex items-center gap-2">
-                                <span class="font-semibold text-gray-700">1x</span>
-                                <span>Kutu Kola</span>
-                            </div>
-                            <span class="font-semibold">₺60</span>
-                        </div>
-                    </div>
-
-                    <div class="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center">
-                        <span class="font-medium text-gray-500 text-sm">Toplam Tutar</span>
-                        <span class="font-bold text-lg">₺510</span>
+                        <span class="font-bold text-brand-dark">₺450</span>
                     </div>
                 </div>
+
+                <div class="mt-8 pt-6 border-t border-gray-50 flex justify-between items-center">
+                    <span data-i18n="totalAmount" class="font-medium text-brand-gray">Toplam Tutar</span>
+                    <span class="font-bold text-2xl text-brand-gold">₺450</span>
+                </div>
             </div>
+        </div>
 
-        </main>
+    </main>
+    <nav
+        class="md:hidden fixed bottom-0 w-full bg-white border-t border-gray-100 px-6 py-2 pb-6 flex justify-between items-center z-40 shadow-[0_-5px_20px_rgba(0,0,0,0.03)]">
+        <button onclick="switchView('home')"
+            class="nav-btn-mobile flex flex-col items-center gap-1.5 w-16 transition-colors text-brand-gold"
+            data-target="home">
+            <i class="fa-solid fa-house text-xl"></i>
+            <span data-i18n="navHome" class="text-[10px] font-medium">Ana Sayfa</span>
+        </button>
+        <button onclick="switchView('search')"
+            class="nav-btn-mobile flex flex-col items-center gap-1.5 w-16 text-brand-gray hover:text-brand-dark transition-colors"
+            data-target="search">
+            <i class="fa-solid fa-magnifying-glass text-xl"></i>
+            <span data-i18n="navSearch" class="text-[10px] font-medium">Menü</span>
+        </button>
+        <button onclick="switchView('history')"
+            class="nav-btn-mobile flex flex-col items-center gap-1.5 w-16 text-brand-gray hover:text-brand-dark transition-colors"
+            data-target="history">
+            <i class="fa-regular fa-clock text-xl"></i>
+            <span data-i18n="navHistory" class="text-[10px] font-medium">Geçmiş</span>
+        </button>
+        <button onclick="window.location.href='/admin'"
+            class="flex flex-col items-center gap-1.5 w-16 text-brand-gray hover:text-brand-dark transition-colors">
+            <i class="fa-solid fa-user-shield text-xl"></i>
+            <span class="text-[10px] font-medium">Admin</span>
+        </button>
+    </nav>
 
-        <nav
-            class="absolute bottom-0 w-full bg-white rounded-t-3xl shadow-[0_-5px_15px_rgba(0,0,0,0.05)] px-8 py-4 pb-6 flex justify-between items-center text-xs font-medium text-gray-500 z-50">
-            <button onclick="switchView('home')"
-                class="nav-btn active flex flex-col items-center gap-1 hover:text-brand-gold transition-colors text-brand-gold"
-                data-target="home">
-                <i class="fa-solid fa-house text-lg mb-0.5"></i><span>Home</span>
-            </button>
-            <button onclick="switchView('search')"
-                class="nav-btn flex flex-col items-center gap-1 hover:text-brand-gold transition-colors"
-                data-target="search">
-                <i class="fa-solid fa-magnifying-glass text-lg mb-0.5"></i><span>Search</span>
-            </button>
-            <button onclick="switchView('history')"
-                class="nav-btn flex flex-col items-center gap-1 hover:text-brand-gold transition-colors"
-                data-target="history">
-                <i class="fa-regular fa-clock text-lg mb-0.5"></i><span>History</span>
-            </button>
-            <button onclick="window.location.href='/admin'"
-                class="nav-btn flex flex-col items-center gap-1 hover:text-brand-gold transition-colors text-gray-500">
-                <i class="fa-solid fa-user-lock text-lg mb-0.5"></i><span>Admin</span>
-            </button>
-        </nav>
-
-        <div id="overlay" class="overlay" onclick="closeProductModal()"></div>
-        <div id="product-modal" class="bottom-sheet overflow-hidden flex flex-col">
-            <div class="relative h-48 shrink-0 rounded-b-[2rem] shadow-sm z-10">
-                <img id="modal-image" src="" class="w-full h-full object-cover rounded-b-[2rem]" alt="">
+    <div id="overlay" class="overlay" onclick="closeProductModal()"></div>
+    <div id="product-modal" class="modal-container shadow-2xl">
+        <div class="flex flex-col md:flex-row h-full">
+            <div class="relative w-full md:w-2/5 h-56 md:h-full shrink-0 bg-gray-50">
+                <img id="modal-image" src="" class="w-full h-full object-cover" alt="">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent md:hidden"></div>
                 <button type="button" onclick="closeProductModal()"
-                    class="absolute top-6 left-6 w-10 h-10 bg-white/90 backdrop-blur hover:bg-white rounded-full flex justify-center items-center text-black text-xl shadow-md cursor-pointer transition-colors">
-                    <i class="fa-solid fa-chevron-left text-sm"></i>
+                    class="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur rounded-full flex justify-center items-center text-brand-dark shadow-sm hover:scale-105 transition-transform z-10">
+                    <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
-            <div class="p-6 flex-1 overflow-y-auto no-scrollbar pb-6 bg-brand-bg -mt-4 pt-10">
-                <div class="flex justify-between items-start mb-2">
-                    <h2 id="modal-title" class="text-3xl font-serif font-semibold text-gray-900 leading-tight">
-                        Yükleniyor...</h2>
-                </div>
 
-                <div class="flex flex-wrap items-center gap-3 text-xs text-gray-500 mb-5">
-                    <div
-                        class="flex items-center gap-1 bg-[#8C6C47] text-white px-3 py-1.5 rounded-lg shadow-sm font-bold text-base">
-                        <span id="modal-price">₺0</span>
+            <div class="flex-1 flex flex-col h-full bg-white overflow-hidden">
+                <div class="p-6 md:p-8 flex-1 overflow-y-auto no-scrollbar">
+
+                    <div class="flex justify-between items-start mb-2">
+                        <h2 id="modal-title"
+                            class="text-2xl md:text-3xl font-serif font-bold text-brand-dark leading-tight">
+                            Yükleniyor...</h2>
+                        <div class="text-xl font-bold text-brand-gold">
+                            <span id="modal-price">₺0</span>
+                        </div>
                     </div>
 
-                    <div
-                        class="flex items-center gap-1 bg-white border border-gray-200 px-2.5 py-1.5 rounded-lg shadow-sm">
-                        <i class="fa-solid fa-star text-yellow-500 text-[10px]"></i>
-                        <span class="font-semibold text-gray-800">4.8</span>
+                    <div class="flex items-center gap-3 text-xs font-medium text-brand-gray mb-6 mt-3">
+                        <span id="modal-cal" class="bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100"><i
+                                class="fa-solid fa-fire mr-1 text-orange-400"></i> 0 kcal</span>
+                        <span id="modal-time" class="bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100"><i
+                                class="fa-regular fa-clock mr-1"></i> 15 dk</span>
                     </div>
-                    <div class="flex items-center gap-1.5">
-                        <i class="fa-regular fa-clock text-gray-400"></i>
-                        <span class="font-medium">15-20 dk</span>
+
+                    <p id="modal-desc" class="text-sm text-brand-gray mb-6 leading-relaxed">Detaylar yükleniyor...</p>
+
+                    <div class="w-full h-px bg-gray-100 mb-6"></div>
+
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between items-center mb-3">
+                                <h3 data-i18n="beverageChoice" class="font-bold text-brand-dark text-sm md:text-base">
+                                    İçecek Seçimi</h3>
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <label
+                                    class="flex justify-between items-center cursor-pointer bg-white border border-gray-200 p-3.5 rounded-xl">
+                                    <span data-i18n="coke" class="font-medium text-sm text-brand-dark">Kutu Kola
+                                        (+₺60)</span>
+                                    <input type="checkbox" name="icecek" value="kola" class="w-4 h-4 rounded">
+                                </label>
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex items-center gap-1.5">
-                        <i class="fa-solid fa-fire text-gray-400"></i>
-                        <span class="font-medium">450 kcal</span>
-                    </div>
-                </div>
 
-                <p id="modal-desc" class="text-sm text-gray-600 mb-6 leading-relaxed">Detaylar yükleniyor...</p>
-
-                <div class="w-full h-px bg-gray-200 mb-6"></div>
-
-                <div class="flex justify-between items-center mb-3">
-                    <h3 class="font-bold text-gray-800 text-lg">İçecek Seçimi</h3>
-                    <span
-                        class="bg-gray-200 text-gray-600 text-[10px] uppercase font-bold tracking-wider px-2 py-1 rounded-md">Opsiyonel</span>
-                </div>
-                <div class="flex flex-col gap-3 mb-8">
-                    <label
-                        class="flex justify-between items-center cursor-pointer bg-white border border-gray-100 p-3.5 rounded-xl shadow-sm hover:border-brand-gold transition-colors">
-                        <span class="font-medium text-sm text-gray-800">Kutu Kola (+₺60)</span>
-                        <input type="checkbox" name="icecek" value="kola" class="w-4 h-4 rounded">
-                    </label>
-                    <label
-                        class="flex justify-between items-center cursor-pointer bg-white border border-gray-100 p-3.5 rounded-xl shadow-sm hover:border-brand-gold transition-colors">
-                        <span class="font-medium text-sm text-gray-800">Ayran (+₺35)</span>
-                        <input type="checkbox" name="icecek" value="ayran" class="w-4 h-4 rounded">
-                    </label>
-                    <label
-                        class="flex justify-between items-center cursor-pointer bg-white border border-gray-100 p-3.5 rounded-xl shadow-sm hover:border-brand-gold transition-colors">
-                        <span class="font-medium text-sm text-gray-800">Su (+₺15)</span>
-                        <input type="checkbox" name="icecek" value="su" class="w-4 h-4 rounded">
-                    </label>
-                </div>
-
-                <div class="flex justify-between items-center mb-3">
-                    <h3 class="font-bold text-gray-800 text-lg">Sos Seçimi</h3>
-                    <span
-                        class="bg-gray-200 text-gray-600 text-[10px] uppercase font-bold tracking-wider px-2 py-1 rounded-md">Zorunlu</span>
-                </div>
-                <div class="flex flex-col gap-3 mb-8">
-                    <label
-                        class="flex justify-between items-center cursor-pointer bg-white border border-gray-100 p-3.5 rounded-xl shadow-sm hover:border-brand-gold transition-colors">
-                        <span class="font-medium text-sm text-gray-800">Mayonez</span>
-                        <input type="radio" name="sos" value="mayonez" class="w-4 h-4">
-                    </label>
-                    <label
-                        class="flex justify-between items-center cursor-pointer bg-white border border-gray-100 p-3.5 rounded-xl shadow-sm hover:border-brand-gold transition-colors">
-                        <span class="font-medium text-sm text-gray-800">Barbekü</span>
-                        <input type="radio" name="sos" value="barbeku" checked class="w-4 h-4">
-                    </label>
-                </div>
-
-                <div class="flex justify-between items-center mb-3">
-                    <h3 class="font-bold text-gray-800 text-lg">Ekstra Malzeme</h3>
-                    <span
-                        class="bg-gray-200 text-gray-600 text-[10px] uppercase font-bold tracking-wider px-2 py-1 rounded-md">Opsiyonel</span>
-                </div>
-                <div class="flex flex-col gap-3 mb-6">
-                    <label
-                        class="flex justify-between items-center cursor-pointer bg-white border border-gray-100 p-3.5 rounded-xl shadow-sm hover:border-brand-gold transition-colors">
-                        <span class="font-medium text-sm text-gray-800">Turşu</span>
-                        <input type="checkbox" name="ekstra" value="tursu" class="w-4 h-4 rounded">
-                    </label>
                 </div>
             </div>
         </div>
-
     </div>
 
     <script>
+        const translations = {
+            tr: {
+                heroTitle: "Harika Tatlar,<br>Güzel Anılar...", heroDesc: "Gelenekten ilham alan lezzetleri modern bir dokunuşla sunuyor, her ziyareti özel bir anıya dönüştürüyoruz.",
+                search: "Lezzet arayın...", tableLabel: "Masa", loadingCats: "Kategoriler yükleniyor...",
+                orderHistory: "Sipariş Geçmişi", currentSession: "Güncel Oturum", activeLabel: "Aktif Sipariş",
+                totalAmount: "Toplam Tutar", navHome: "Ana Sayfa", navSearch: "Menü", navHistory: "Geçmiş",
+                productsTitle: "Lezzetlerimiz", beverageChoice: "İçecek Seçimi", sauceChoice: "Sos Seçimi", extraIngredients: "Ekstralar",
+                optional: "Opsiyonel", required: "Zorunlu", coke: "Kutu Kola (+₺60)", ayran: "Ayran (+₺35)", water: "Su (+₺15)", pickles: "Turşu"
+            },
+            en: {
+                heroTitle: "Great Tastes,<br>Beautiful Memories...", heroDesc: "Offering tradition-inspired flavors with a modern touch, turning every visit into a special memory.",
+                search: "Search flavors...", tableLabel: "Table", loadingCats: "Loading categories...",
+                orderHistory: "Order History", currentSession: "Current Session", activeLabel: "Active Order",
+                totalAmount: "Total Amount", navHome: "Home", navSearch: "Menu", navHistory: "History",
+                productsTitle: "Our Flavors", beverageChoice: "Beverages", sauceChoice: "Sauces", extraIngredients: "Extras",
+                optional: "Optional", required: "Required", coke: "Coke (+₺60)", ayran: "Ayran (+₺35)", water: "Water (+₺15)", pickles: "Pickles"
+            }
+        };
+
+        let currentLang = 'tr';
         let allProducts = [];
-        let currentTable = 'Bilinmiyor';
+        let currentTable = '-';
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+
+            document.querySelectorAll('.btn-lang-tr').forEach(el => {
+                if (lang === 'tr') el.classList.add('bg-white', 'text-brand-dark', 'shadow-sm', 'font-semibold');
+                else el.classList.remove('bg-white', 'text-brand-dark', 'shadow-sm', 'font-semibold');
+                if (lang !== 'tr') el.classList.add('text-brand-gray', 'bg-transparent');
+                else el.classList.remove('text-brand-gray', 'bg-transparent');
+            });
+            document.querySelectorAll('.btn-lang-en').forEach(el => {
+                if (lang === 'en') el.classList.add('bg-white', 'text-brand-dark', 'shadow-sm', 'font-semibold');
+                else el.classList.remove('bg-white', 'text-brand-dark', 'shadow-sm', 'font-semibold');
+                if (lang !== 'en') el.classList.add('text-brand-gray', 'bg-transparent');
+                else el.classList.remove('text-brand-gray', 'bg-transparent');
+            });
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) el.innerHTML = translations[lang][key];
+            });
+
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (translations[lang][key]) el.setAttribute('placeholder', translations[lang][key]);
+            });
+
+            const prodTitle = document.getElementById('dynamic-products-title');
+            if (prodTitle) prodTitle.innerText = translations[lang].productsTitle;
+        }
 
         document.addEventListener("DOMContentLoaded", () => {
             const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.has('masa')) {
-                currentTable = urlParams.get('masa');
-            } else if (urlParams.has('table')) {
-                currentTable = urlParams.get('table');
-            }
+            if (urlParams.has('masa')) currentTable = urlParams.get('masa');
+            else if (urlParams.has('table')) currentTable = urlParams.get('table');
 
-            document.querySelectorAll('.current-table-display').forEach(el => {
-                el.innerText = currentTable;
-            });
+            document.querySelectorAll('.current-table-display').forEach(el => el.innerText = currentTable);
+            changeLanguage('tr');
 
-            const minSplashTime = new Promise(resolve => setTimeout(resolve, 1500));
+            const minSplashTime = new Promise(resolve => setTimeout(resolve, 800));
+            const fetchCat = fetch('/api/categories').then(res => res.json()).catch(() => ({ status: 'error', data: [] }));
 
-            const fetchCat = fetch('/api/categories')
-                .then(res => res.json())
-                .catch(err => {
-                    return { status: 'error', data: [] };
-                });
-
-            fetchUser();
             fetchProducts();
 
-            Promise.all([fetchCat, minSplashTime])
-                .then(([result]) => {
-                    hideSplashScreen();
-                    if (result && result.status === 'success') {
-                        renderCategories(result.data);
-                    } else {
-                        renderCategories([]);
-                    }
-                })
-                .catch(() => {
-                    hideSplashScreen();
-                    renderCategories([]);
-                });
+            Promise.all([fetchCat, minSplashTime]).then(([result]) => {
+                hideSplashScreen();
+                if (result && result.status === 'success') renderCategories(result.data);
+                else renderCategories([]);
+            }).catch(() => { hideSplashScreen(); renderCategories([]); });
         });
 
         function renderCategories(categories) {
@@ -471,8 +437,6 @@
                 { name: 'BAŞLANGIÇ', image_url: 'images/baslangic.jpg' },
                 { name: 'PİZZA', image_url: 'images/pizza.jpg' },
                 { name: 'KEBAP', image_url: 'images/kebap.webp' },
-                { name: 'DÖNER', image_url: 'images/doner.jpg' },
-                { name: 'MAKARNA', image_url: 'images/makarna.jpg' },
                 { name: 'İÇECEKLER', image_url: 'images/kahve.png' }
             ];
 
@@ -481,13 +445,12 @@
             dataToRender.forEach(cat => {
                 const imgUrl = cat.image_url || '';
                 const catName = cat.name.toUpperCase();
-
                 container.innerHTML += `
-                    <div class="w-full h-[110px] rounded-[18px] relative overflow-hidden shadow-sm cursor-pointer hover:opacity-95 transition-opacity" onclick="showProducts('${catName}')">
-                        <img src="${imgUrl}" class="absolute inset-0 w-full h-full object-cover" alt="${catName}">
-                        <div class="absolute inset-0 bg-gradient-to-r from-black/95 via-black/50 to-transparent"></div>
-                        <div class="absolute inset-y-0 left-6 flex items-center z-10">
-                            <h3 class="text-white font-serif text-[1.1rem] tracking-wide uppercase">${catName}</h3>
+                    <div class="relative w-full h-32 md:h-40 rounded-[1.5rem] overflow-hidden cursor-pointer shadow-sm border border-gray-100" onclick="showProducts('${catName}')">
+                        <img src="${imgUrl}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300" alt="${catName}">
+                        <div class="absolute inset-0 bg-black/40 hover:bg-black/50 transition-colors duration-300"></div>
+                        <div class="absolute inset-0 flex items-center justify-center p-2 text-center">
+                            <h3 class="text-white font-serif text-lg md:text-xl tracking-widest uppercase drop-shadow-md">${catName}</h3>
                         </div>
                     </div>
                 `;
@@ -497,98 +460,85 @@
         function showProducts(categoryName) {
             document.getElementById('category-list').classList.add('hidden');
             document.getElementById('dynamic-product-list').classList.remove('hidden');
-            document.getElementById('dynamic-product-list').classList.add('flex');
             renderProducts(allProducts);
         }
 
         function fetchProducts() {
-            fetch('/api/products')
-                .then(res => res.json())
-                .then(result => {
-                    if (result.status === 'success') {
-                        allProducts = result.data;
-                    }
-                })
+            fetch('/api/products').then(res => res.json())
+                .then(result => { if (result.status === 'success') allProducts = result.data; })
                 .catch(err => console.error(err));
         }
 
         function renderProducts(products) {
             const container = document.getElementById('dynamic-product-list');
-            container.innerHTML = `
-                <div class="flex items-center gap-4 mb-2">
-                    <button onclick="backToCategories()" class="text-xl"><i class="fa-solid fa-chevron-left"></i></button>
-                    <h3 class="font-serif text-2xl font-semibold">Ürünler</h3>
+            const titleText = translations[currentLang].productsTitle;
+
+            let html = `
+                <div class="flex items-center gap-4 mb-6">
+                    <button onclick="backToCategories()" class="w-10 h-10 bg-white border border-gray-200 rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors shadow-sm text-brand-dark"><i class="fa-solid fa-arrow-left"></i></button>
+                    <h3 id="dynamic-products-title" class="font-serif text-2xl md:text-3xl font-semibold text-brand-dark">${titleText}</h3>
                 </div>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
             `;
 
             products.forEach(product => {
-                const glutenFreeTag = product.is_gluten_free ? '<span class="text-[10px] bg-[#8C6C47] text-white px-2 py-0.5 rounded ml-2">Glutensiz</span>' : '';
+                const glutenFreeTag = product.is_gluten_free ? '<div class="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-2 py-0.5 rounded text-[9px] font-bold text-brand-gold shadow-sm">GF</div>' : '';
                 const imgUrl = product.image_url || '';
 
-                container.innerHTML += `
-                    <div onclick="openProductModal(${product.id})" class="bg-white rounded-2xl flex p-2 shadow-sm cursor-pointer hover:shadow-md transition-shadow animate-fade-in-up">
-                        <img src="${imgUrl}" class="w-32 h-24 object-cover rounded-xl shrink-0" alt="">
-                        <div class="ml-4 flex flex-col justify-center flex-1">
-                            <h4 class="font-semibold text-brand-text text-sm flex items-center">${product.name} ${glutenFreeTag}</h4>
-                            <p class="text-xs text-gray-500 line-clamp-2 mt-1">${product.description}</p>
-                            <div class="flex justify-between items-end mt-2">
-                                <span class="font-semibold">₺${product.price}</span>
-                                <div class="text-[10px] text-gray-500 flex gap-2">
-                                    <span><i class="fa-solid fa-fire text-gray-400"></i> ${product.calories} kcal</span>
-                                    <span><i class="fa-regular fa-clock text-gray-400"></i> ${product.prep_time} dk</span>
+
+                html += `
+                    <div onclick="openProductModal(${product.id})" class="bg-white rounded-[1.5rem] overflow-hidden shadow-sm border border-gray-100 cursor-pointer transition-transform duration-300 hover:-translate-y-1 flex flex-col">
+                        <div class="relative w-full h-32 md:h-44 bg-gray-50">
+                            <img src="${imgUrl}" class="w-full h-full object-cover" alt="${product.name}">
+                            ${glutenFreeTag}
+                        </div>
+                        <div class="p-3 md:p-4 flex flex-col justify-between flex-1">
+                            <div>
+                                <h4 class="font-semibold text-brand-dark text-sm md:text-base line-clamp-1">${product.name}</h4>
+                                <p class="text-[10px] md:text-xs text-brand-gray line-clamp-2 mt-1 leading-relaxed">${product.description}</p>
+                            </div>
+                            <div class="flex justify-between items-center mt-3 pt-3 border-t border-gray-50">
+                                <span class="font-bold text-brand-dark text-base md:text-lg">₺${product.price}</span>
+                                <div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-brand-gold text-white flex justify-center items-center shadow-sm">
+                                    <i class="fa-solid fa-plus text-[10px] md:text-xs"></i>
                                 </div>
                             </div>
                         </div>
                     </div>
                 `;
             });
+
+            html += `</div>`;
+            container.innerHTML = html;
         }
 
         function backToCategories() {
             document.getElementById('category-list').classList.remove('hidden');
             document.getElementById('dynamic-product-list').classList.add('hidden');
-            document.getElementById('dynamic-product-list').classList.remove('flex');
-        }
-
-        function fetchUser() {
-            fetch('/api/user')
-                .then(res => res.json())
-                .then(result => {
-                    if (result.status === 'success') {
-                        document.getElementById('profile-name').innerText = result.data.name || result.data.full_name || 'Kullanıcı';
-                    }
-                })
-                .catch(err => console.error(err));
+            document.getElementById('dynamic-product-list').innerHTML = '';
         }
 
         function hideSplashScreen() {
             const splash = document.getElementById('splash-screen');
-            splash.classList.add('opacity-0');
-            setTimeout(() => splash.remove(), 700);
+            splash.style.opacity = '0';
+            setTimeout(() => splash.remove(), 300);
         }
 
         function switchView(viewName) {
-            document.querySelectorAll('.page-view').forEach(view => {
-                view.classList.remove('active');
-            });
+            document.querySelectorAll('.page-view').forEach(view => view.classList.remove('active'));
             const targetView = document.getElementById(`view-${viewName}`);
-            if (targetView) targetView.classList.add('active');
-
-            const header = document.getElementById('main-header');
-            if (header) {
-                if (viewName === 'home') {
-                    header.classList.add('hidden');
-                    header.classList.remove('flex');
-                } else {
-                    header.classList.remove('hidden');
-                    header.classList.add('flex');
-                }
+            if (targetView) {
+                targetView.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
 
-            document.querySelectorAll('.nav-btn').forEach(btn => {
+            document.querySelectorAll('.nav-btn-desktop, .nav-btn-mobile').forEach(btn => {
                 btn.classList.remove('text-brand-gold');
+                if (btn.classList.contains('nav-btn-mobile')) btn.classList.add('text-brand-gray');
+
                 if (btn.dataset.target === viewName) {
                     btn.classList.add('text-brand-gold');
+                    if (btn.classList.contains('nav-btn-mobile')) btn.classList.remove('text-brand-gray');
                 }
             });
         }
@@ -601,14 +551,18 @@
             document.getElementById('modal-title').innerText = product.name;
             document.getElementById('modal-price').innerText = `₺${product.price}`;
             document.getElementById('modal-desc').innerText = product.description;
+            document.getElementById('modal-cal').innerHTML = `<i class="fa-solid fa-fire text-orange-400 mr-1.5"></i>${product.calories || 0} kcal`;
+            document.getElementById('modal-time').innerHTML = `<i class="fa-regular fa-clock mr-1.5 text-gray-400"></i>${product.prep_time || 15} dk`;
 
             document.getElementById('overlay').classList.add('open');
             document.getElementById('product-modal').classList.add('open');
+            document.body.style.overflow = 'hidden';
         }
 
         function closeProductModal() {
             document.getElementById('overlay').classList.remove('open');
             document.getElementById('product-modal').classList.remove('open');
+            document.body.style.overflow = '';
         }
     </script>
 </body>
