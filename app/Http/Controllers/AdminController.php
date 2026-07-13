@@ -37,7 +37,7 @@ class AdminController extends Controller
             $request->image->move(public_path('images'), $imageName);
             $category->image_url = 'images/' . $imageName;
         } else {
-            $category->image_url = 'images/placeholder.jpg';
+            $category->image_url = '';
         }
 
         $category->save();
@@ -50,28 +50,25 @@ class AdminController extends Controller
         $category->name = $request->name;
 
         if ($request->hasFile('image')) {
-
-            if ($category->image_url && !str_contains($category->image_url, 'placeholder')) {
-                if (File::exists(public_path($category->image_url))) {
-                    File::delete(public_path($category->image_url));
-                }
+            if ($category->image_url && File::exists(public_path($category->image_url))) {
+                File::delete(public_path($category->image_url));
             }
-
             $imageName = time() . '.' . $request->image->extension();
             $request->image->move(public_path('images'), $imageName);
             $category->image_url = 'images/' . $imageName;
         }
 
         $category->save();
-        return redirect()->back()->with('success', 'Kategori güncellendi!');
+        return redirect()->back()->with('success', 'Kategori başarıyla güncellendi!');
     }
 
     public function deleteCategory($id)
     {
         $category = Category::findOrFail($id);
-
+        if ($category->image_url && File::exists(public_path($category->image_url))) {
+            File::delete(public_path($category->image_url));
+        }
         $category->delete();
-
         return redirect()->back()->with('success', 'Kategori silindi!');
     }
 
@@ -90,7 +87,6 @@ class AdminController extends Controller
             'price' => 'required|numeric',
             'description' => 'nullable|string',
             'calories' => 'nullable|integer',
-            'prep_time' => 'nullable|integer',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048'
         ]);
 
@@ -99,18 +95,50 @@ class AdminController extends Controller
         $product->name = $request->name;
         $product->price = $request->price;
         $product->description = $request->description;
-        $product->calories = $request->calories;
-        $product->prep_time = $request->prep_time;
+        $product->calories = $request->calories ?? 0;
         $product->is_gluten_free = $request->has('is_gluten_free') ? 1 : 0;
 
         if ($request->hasFile('image')) {
             $imageName = time() . '_prod.' . $request->image->extension();
             $request->image->move(public_path('images'), $imageName);
             $product->image_url = 'images/' . $imageName;
+        } else {
+            $product->image_url = '';
         }
 
         $product->save();
         return redirect()->back()->with('success', 'Ürün başarıyla eklendi!');
+    }
+
+    public function updateProduct(Request $request, $id)
+    {
+        $request->validate([
+            'category_id' => 'required|integer',
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric',
+            'description' => 'nullable|string',
+            'calories' => 'nullable|integer'
+        ]);
+
+        $product = Product::findOrFail($id);
+        $product->category_id = $request->category_id;
+        $product->name = $request->name;
+        $product->price = $request->price;
+        $product->description = $request->description;
+        $product->calories = $request->calories ?? 0;
+        $product->is_gluten_free = $request->has('is_gluten_free') ? 1 : 0;
+
+        if ($request->hasFile('image')) {
+            if ($product->image_url && File::exists(public_path($product->image_url))) {
+                File::delete(public_path($product->image_url));
+            }
+            $imageName = time() . '_prod.' . $request->image->extension();
+            $request->image->move(public_path('images'), $imageName);
+            $product->image_url = 'images/' . $imageName;
+        }
+
+        $product->save();
+        return redirect()->back()->with('success', 'Ürün başarıyla güncellendi!');
     }
 
     public function deleteProduct($id)
@@ -119,14 +147,15 @@ class AdminController extends Controller
         if ($product->image_url && File::exists(public_path($product->image_url))) {
             File::delete(public_path($product->image_url));
         }
-
         $product->delete();
         return redirect()->back()->with('success', 'Ürün silindi!');
     }
+
     public function orders()
     {
         return view('admin.orders');
     }
+
     public function settings()
     {
         return view('admin.settings');

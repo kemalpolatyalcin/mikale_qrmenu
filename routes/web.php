@@ -15,7 +15,6 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
-
     Route::get('/', [AdminController::class, 'index'])->name('dashboard');
 
     Route::get('/categories', [AdminController::class, 'categories'])->name('categories');
@@ -27,6 +26,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::post('/products/store', [AdminController::class, 'storeProduct'])->name('products.store');
     Route::post('/products/update/{id}', [AdminController::class, 'updateProduct'])->name('products.update');
     Route::get('/products/delete/{id}', [AdminController::class, 'deleteProduct'])->name('products.delete');
+
     Route::get('/orders', [AdminController::class, 'orders'])->name('orders');
     Route::get('/settings', [AdminController::class, 'settings'])->name('settings');
 });
