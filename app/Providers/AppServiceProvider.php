@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-
+use App\Models\Setting;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Schema;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -19,6 +21,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        if (Schema::hasTable('settings')) {
+            $siteSettings = Setting::pluck('value', 'key')->toArray();
+            View::share('siteSettings', $siteSettings);
+        }
     }
 }

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mikale Food Menu</title>
+    <title>{{ $siteSettings['restaurant_name'] ?? 'Mikale' }} Food Menu</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link
@@ -201,7 +201,13 @@
                 preserveAspectRatio="none" fill="currentColor">
                 <path d="M0,60 C400,160 1000,-40 1440,60 L1440,85 C1000,-15 400,185 0,85 Z"></path>
             </svg>
-            <div class="font-allison text-[8rem] text-black relative z-10 anim-logo pr-4 pt-4">M</div>
+            @if(isset($siteSettings['logo']) && $siteSettings['logo'] != '')
+                <img src="{{ asset($siteSettings['logo']) }}" class="relative z-10 anim-logo h-32 object-contain"
+                    alt="Logo">
+            @else
+                <div class="font-allison text-[8rem] text-black relative z-10 anim-logo pr-4 pt-4">
+                    {{ substr($siteSettings['restaurant_name'] ?? 'M', 0, 1) }}</div>
+            @endif
             <svg class="absolute bottom-[30%] left-0 w-full h-16 anim-stripe-bottom text-brand-gold"
                 viewBox="0 0 1440 150" preserveAspectRatio="none" fill="currentColor">
                 <path d="M0,60 C400,160 1000,-40 1440,60 L1440,85 C1000,-15 400,185 0,85 Z"></path>
@@ -210,8 +216,16 @@
 
         <header id="main-header"
             class="hidden justify-between items-center px-6 pt-12 md:pt-6 pb-4 bg-brand-bg border-b border-gray-100">
-            <div class="font-allison text-5xl text-black leading-none pt-2 cursor-pointer" onclick="switchView('home')">
-                M</div>
+            <div class="cursor-pointer flex items-center gap-2" onclick="switchView('home')">
+                @if(isset($siteSettings['logo']) && $siteSettings['logo'] != '')
+                    <img src="{{ asset($siteSettings['logo']) }}" class="h-10 object-contain" alt="Logo">
+                @else
+                    <div class="font-allison text-5xl text-black leading-none pt-2">
+                        {{ substr($siteSettings['restaurant_name'] ?? 'M', 0, 1) }}</div>
+                @endif
+                <span
+                    class="font-serif font-bold text-lg hidden md:block tracking-widest">{{ $siteSettings['restaurant_name'] ?? '' }}</span>
+            </div>
 
             <nav class="hidden md:flex items-center gap-8 font-medium text-sm text-gray-500">
                 <button onclick="switchView('home')" class="hover:text-brand-gold transition-colors">Ana Sayfa</button>
@@ -238,7 +252,8 @@
 
             <div id="view-home" class="page-view active w-full h-full relative">
                 <div class="relative w-full h-[420px] md:h-[60vh] rounded-b-[2rem] overflow-hidden">
-                    <img src="images/background.jpg" class="w-full h-full object-cover" alt="">
+                    <img src="{{ isset($siteSettings['cover_image']) && $siteSettings['cover_image'] != '' ? asset($siteSettings['cover_image']) : asset('images/background.jpg') }}"
+                        class="w-full h-full object-cover" alt="">
                     <div class="absolute inset-0 bg-gradient-to-t from-brand-bg from-5% via-black/40 to-black/30"></div>
 
                     <div class="absolute top-12 md:top-6 right-6 flex items-center gap-3 z-20">
@@ -257,9 +272,10 @@
                     </div>
 
                     <div class="absolute bottom-10 left-0 w-full text-center z-10 px-4">
-                        <h1 data-i18n="heroTitle"
+                        <h1
                             class="text-[31px] md:text-[45px] font-poppins font-light text-white leading-tight drop-shadow-md">
-                            Harika Tatlar,<br>Güzel Anılar...</h1>
+                            {!! $siteSettings['slogan'] ?? 'Harika Tatlar,<br>Güzel Anılar...' !!}
+                        </h1>
                     </div>
                 </div>
 
@@ -269,7 +285,15 @@
                 </svg>
 
                 <div class="flex flex-col items-center px-8 pt-6 pb-8 text-center bg-brand-bg">
-                    <div class="font-allison text-[7rem] leading-none text-black mb-6 md:hidden">M</div>
+                    <div class="mb-6 md:hidden">
+                        @if(isset($siteSettings['logo']) && $siteSettings['logo'] != '')
+                            <img src="{{ asset($siteSettings['logo']) }}" class="h-24 object-contain mx-auto" alt="Logo">
+                        @else
+                            <div class="font-allison text-[7rem] leading-none text-black">
+                                {{ substr($siteSettings['restaurant_name'] ?? 'M', 0, 1) }}</div>
+                        @endif
+                    </div>
+
                     <p data-i18n="heroDesc"
                         class="text-[18px] md:text-[21px] font-poppins font-normal text-brand-text mb-10 leading-snug max-w-2xl">
                         Gelenekten ilham alan lezzetleri modern bir dokunuşla sunuyor, her ziyareti özel bir anıya
@@ -289,6 +313,17 @@
             </div>
 
             <div id="view-search" class="page-view px-6 py-4 md:py-8">
+
+                @if(isset($siteSettings['wifi_password']) && $siteSettings['wifi_password'] != '')
+                    <div class="max-w-2xl mx-auto mb-4 text-center">
+                        <div
+                            class="inline-flex items-center gap-2 bg-white border border-gray-200 text-gray-600 px-4 py-2 rounded-full text-sm shadow-sm">
+                            <i class="fa-solid fa-wifi text-[#8C6C47]"></i>
+                            <span>Wi-Fi: <strong class="text-gray-800">{{ $siteSettings['wifi_password'] }}</strong></span>
+                        </div>
+                    </div>
+                @endif
+
                 <div class="relative mb-6 mt-2 max-w-2xl mx-auto">
                     <i
                         class="fa-solid fa-magnifying-glass absolute left-5 top-1/2 transform -translate-y-1/2 text-black text-lg"></i>
@@ -357,7 +392,7 @@
 
                     <div class="flex flex-wrap items-center gap-3 text-xs font-medium text-gray-600 mb-6">
                         <span id="modal-price"
-                            class="bg-amber-50 text-brand-gold px-4 py-1.5 rounded-lg border border-amber-100 font-bold text-sm">₺0</span>
+                            class="bg-amber-50 text-brand-gold px-4 py-1.5 rounded-lg border border-amber-100 font-bold text-sm">{{ $siteSettings['currency'] ?? '₺' }}0</span>
                         <span id="modal-cal" class="bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100"><i
                                 class="fa-solid fa-fire text-orange-400 mr-1"></i> 0 kcal</span>
                         <span id="modal-time" class="bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100"><i
@@ -377,14 +412,16 @@
     </div>
 
     <script>
+        const currencySymbol = "{{ $siteSettings['currency'] ?? '₺' }}";
+
         const translations = {
             tr: {
-                heroTitle: "Harika Tatlar,<br>Güzel Anılar...", heroDesc: "Gelenekten ilham alan lezzetleri modern bir dokunuşla sunuyor, her ziyareti özel bir anıya dönüştürüyoruz",
+                heroDesc: "Gelenekten ilham alan lezzetleri modern bir dokunuşla sunuyor, her ziyareti özel bir anıya dönüştürüyoruz",
                 search: "Arama....", tableLabel: "Masa:", loadingCats: "Kategoriler yükleniyor...",
                 navHome: "Ana Sayfa", navSearch: "Menü", navSearchBtn: "Menü", searchResults: "Arama Sonuçları"
             },
             en: {
-                heroTitle: "Great Tastes,<br>Beautiful Memories...", heroDesc: "Offering tradition-inspired flavors with a modern touch, turning every visit into a special memory",
+                heroDesc: "Offering tradition-inspired flavors with a modern touch, turning every visit into a special memory",
                 search: "Search....", tableLabel: "Table:", loadingCats: "Loading categories...",
                 navHome: "Home", navSearch: "Menu", navSearchBtn: "Menu", searchResults: "Search Results"
             }
@@ -541,7 +578,7 @@
                                 <p class="text-[10px] text-gray-500 line-clamp-2 mt-1 leading-relaxed">${product.description}</p>
                             </div>
                             <div class="flex justify-between items-center mt-3 pt-3 border-t border-gray-50">
-                                <span class="font-bold text-[#8C6C47] text-sm">₺${product.price}</span>
+                                <span class="font-bold text-[#8C6C47] text-sm">${currencySymbol}${product.price}</span>
                             </div>
                         </div>
                     </div>
@@ -583,7 +620,7 @@
 
             document.getElementById('modal-image').src = product.image_url || '';
             document.getElementById('modal-title').innerText = product.name;
-            document.getElementById('modal-price').innerText = `₺${product.price}`;
+            document.getElementById('modal-price').innerText = `${currencySymbol}${product.price}`;
             document.getElementById('modal-desc').innerText = product.description;
             document.getElementById('modal-cal').innerHTML = `<i class="fa-solid fa-fire text-orange-400 mr-1"></i> ${product.calories || 0} kcal`;
             document.getElementById('modal-time').innerHTML = `<i class="fa-regular fa-clock mr-1 text-gray-400"></i> ${product.prep_time || 15} dk`;
@@ -592,7 +629,17 @@
             document.getElementById('product-modal').classList.add('open');
             document.body.style.overflow = 'hidden';
         }
+        function backToCategories() {
 
+            document.getElementById('dynamic-product-list').classList.add('hidden');
+            document.getElementById('dynamic-product-list').classList.remove('flex');
+
+
+            document.getElementById('category-list').classList.remove('hidden');
+
+
+            document.getElementById('searchInput').value = '';
+        }
         function closeProductModal() {
             document.getElementById('overlay').classList.remove('open');
             document.getElementById('product-modal').classList.remove('open');

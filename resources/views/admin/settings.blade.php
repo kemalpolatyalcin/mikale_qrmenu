@@ -1,172 +1,113 @@
-<!DOCTYPE html>
-<html lang="tr">
+@extends('layouts.admin')
 
-<head>
-    <meta charset="UTF-8">
-    <title>Mikale | Ayarlar ve Masalar</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Allison&family=Poppins:wght@300;400;500;600&display=swap"
-        rel="stylesheet">
-    <style>
-        .font-allison {
-            font-family: 'Allison', cursive;
-        }
-
-        .font-poppins {
-            font-family: 'Poppins', sans-serif;
-        }
-    </style>
-</head>
-
-<body class="bg-[#F9F8F3] font-poppins flex h-screen overflow-hidden">
-
-    <aside class="w-64 bg-white shadow-xl flex flex-col justify-between hidden md:flex z-20 relative shrink-0">
-        <div>
-            <div class="h-24 flex items-center justify-center border-b border-gray-100 mb-6">
-                <span class="font-allison text-6xl text-[#1C1C1C] mt-4">M</span>
-                <span class="text-xl font-bold ml-2 tracking-widest text-[#1C1C1C]">MIKALE</span>
-            </div>
-            <nav class="px-4 space-y-2">
-                <a href="{{ url('/') }}" target="_blank"
-                    class="flex items-center gap-3 px-4 py-3 text-[#8C6C47] bg-amber-50 hover:bg-amber-100 rounded-xl transition-all mb-4 border border-amber-100 shadow-sm"><i
-                        class="fa-solid fa-arrow-up-right-from-square w-5 text-center"></i><span
-                        class="font-medium text-sm">Menüyü Görüntüle</span></a>
-                <a href="{{ route('admin.dashboard') }}"
-                    class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-[#8C6C47] rounded-xl transition-all"><i
-                        class="fa-solid fa-chart-pie w-5"></i><span class="font-medium text-sm">Gösterge
-                        Paneli</span></a>
-                <a href="{{ route('admin.categories') }}"
-                    class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-[#8C6C47] rounded-xl transition-all"><i
-                        class="fa-solid fa-layer-group w-5"></i><span class="font-medium text-sm">Kategoriler</span></a>
-                <a href="{{ route('admin.products') }}"
-                    class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-[#8C6C47] rounded-xl transition-all"><i
-                        class="fa-solid fa-utensils w-5"></i><span class="font-medium text-sm">Ürünler</span></a>
-                <a href="{{ route('admin.orders') }}"
-                    class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-[#8C6C47] rounded-xl transition-all"><i
-                        class="fa-solid fa-bell-concierge w-5"></i><span class="font-medium text-sm">Aktif
-                        Siparişler</span></a>
-                <a href="{{ route('admin.settings') }}"
-                    class="flex items-center gap-3 px-4 py-3 bg-[#8C6C47] text-white rounded-xl shadow-md transition-all"><i
-                        class="fa-solid fa-gear w-5"></i><span class="font-medium text-sm">Ayarlar</span></a>
-            </nav>
+@section('content')
+    <div class="max-w-4xl mx-auto pb-10">
+        <div class="mb-8">
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">Restoran Profili</h1>
+            <p class="text-sm text-gray-500">Logonuzu, fotoğraflarınızı ve müşterilerinize görünen diğer işletme
+                bilgilerinizi buradan güncelleyebilirsiniz.</p>
         </div>
-        <div class="p-4 border-t border-gray-100">
-            <form action="{{ route('logout') }}" method="POST">@csrf<button type="submit"
-                    class="w-full flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 rounded-xl transition-all font-medium text-sm"><i
-                        class="fa-solid fa-arrow-right-from-bracket w-5"></i> Çıkış Yap</button></form>
-        </div>
-    </aside>
 
-    <main class="flex-1 flex flex-col h-screen overflow-hidden">
-        <header
-            class="h-20 bg-white/80 backdrop-blur-md flex items-center justify-between px-8 shadow-sm z-10 shrink-0">
-            <h2 class="text-xl font-semibold text-gray-800">Sistem ve Masa Ayarları</h2>
-        </header>
-
-        <div class="flex-1 overflow-y-auto p-8 no-scrollbar space-y-8">
-
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 max-w-3xl">
-                <h3 class="text-base font-semibold text-gray-800 mb-4">Restoran Yapılandırması</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div><label class="block text-xs font-medium text-gray-500 mb-1">Restoran Adı</label><input
-                            type="text" value="Mikale Restaurant" readonly
-                            class="w-full bg-gray-50 px-4 py-2 rounded-xl text-sm border font-medium text-gray-700">
-                    </div>
-                    <div><label class="block text-xs font-medium text-gray-500 mb-1">Para Birimi</label><input
-                            type="text" value="TRY (₺)" readonly
-                            class="w-full bg-gray-50 px-4 py-2 rounded-xl text-sm border font-medium text-gray-700">
-                    </div>
-                    <div><label class="block text-xs font-medium text-gray-500 mb-1">Toplam Tanımlı Masa</label><input
-                            type="text" value="12" readonly
-                            class="w-full bg-gray-50 px-4 py-2 rounded-xl text-sm border font-medium text-gray-700">
-                    </div>
-                </div>
+        @if(session('success'))
+            <div class="bg-green-50 text-green-700 p-4 rounded-xl mb-6 border border-green-100 flex items-center gap-3">
+                <i class="fa-solid fa-circle-check"></i> {{ session('success') }}
             </div>
+        @endif
 
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 max-w-3xl">
-                <h3 class="text-base font-semibold text-gray-800 mb-1">Masa QR Kod Bağlantıları</h3>
-                <p class="text-xs text-gray-400 mb-6">Aşağıdaki bağlantıları kullanarak masalara özel QR kodlarınızı
-                    üretebilirsiniz.</p>
+        <form action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+            @csrf
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    @for ($i = 1; $i <= 12; $i++)
-                        @php $tableUrl = url('/?masa=' . sprintf("%02d", $i)); @endphp
-                        <div class="p-3 border border-gray-100 rounded-xl bg-gray-50/50 flex items-center justify-between">
-                            <div>
-                                <p class="text-xs font-bold text-gray-800">Masa {{ sprintf("%02d", $i) }} URL</p>
-                                <p class="text-[10px] text-gray-400 font-mono truncate w-52 mt-0.5">{{ $tableUrl }}</p>
+            <div class="bg-white rounded-[2rem] p-8 shadow-sm border border-gray-100">
+                <h2 class="text-lg font-bold text-gray-800 mb-6 border-b pb-2"><i
+                        class="fa-solid fa-image text-[#8C6C47] mr-2"></i>Görsel Ayarları</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Restoran Logosu</label>
+                        @if(isset($settings['logo']) && $settings['logo'] != '')
+                            <div class="mb-3 bg-gray-50 p-2 rounded-xl inline-block border border-gray-200">
+                                <img src="{{ asset($settings['logo']) }}" alt="Logo" class="h-16 object-contain">
                             </div>
-                            <a href="{{ $tableUrl }}" target="_blank"
-                                class="w-8 h-8 rounded-lg bg-amber-50 text-[#8C6C47] hover:bg-[#8C6C47] hover:text-white flex items-center justify-center transition-all shadow-sm">
-                                <i class="fa-solid fa-external-link text-xs"></i>
-                            </a>
-                        </div>
-                    @endfor
+                        @endif
+                        <input type="file" name="logo" accept="image/*"
+                            class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-amber-50 file:text-[#8C6C47] hover:file:bg-amber-100 transition-all">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Menü Karşılama Fotoğrafı (Arka
+                            Plan)</label>
+                        @if(isset($settings['cover_image']) && $settings['cover_image'] != '')
+                            <div class="mb-3 bg-gray-50 rounded-xl overflow-hidden border border-gray-200 h-24 relative">
+                                <img src="{{ asset($settings['cover_image']) }}" alt="Cover" class="w-full h-full object-cover">
+                            </div>
+                        @endif
+                        <input type="file" name="cover_image" accept="image/*"
+                            class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-amber-50 file:text-[#8C6C47] hover:file:bg-amber-100 transition-all">
+                    </div>
                 </div>
             </div>
 
-        </div>
-    </main>
-</body>
-<header
-    class="md:hidden sticky top-0 bg-white/90 backdrop-blur-md shadow-sm z-30 px-6 py-4 flex justify-between items-center border-b border-gray-100">
-    <div class="font-allison text-3xl text-black leading-none">M</div>
-    <button onclick="document.getElementById('mobile-admin-menu').classList.remove('translate-x-full')"
-        class="text-gray-800 text-2xl focus:outline-none">
-        <i class="fa-solid fa-bars"></i>
-    </button>
-</header>
-<div id="mobile-admin-menu"
-    class="fixed inset-0 z-50 transform translate-x-full transition-transform duration-300 md:hidden">
-    <div class="absolute inset-0 bg-black/50"
-        onclick="document.getElementById('mobile-admin-menu').classList.add('translate-x-full')"></div>
-    <div class="absolute top-0 right-0 w-64 h-full bg-white shadow-xl flex flex-col justify-between py-6 px-4">
-        <div>
-            <div class="flex justify-between items-center mb-8 px-2 border-b border-gray-100 pb-4">
-                <span class="font-serif text-xl font-bold tracking-widest text-[#1C1C1C]">MIKALE</span>
-                <button onclick="document.getElementById('mobile-admin-menu').classList.add('translate-x-full')"
-                    class="text-gray-500 text-xl focus:outline-none"><i class="fa-solid fa-xmark"></i></button>
+            <div class="bg-white rounded-[2rem] p-8 shadow-sm border border-gray-100">
+                <h2 class="text-lg font-bold text-gray-800 mb-6 border-b pb-2"><i
+                        class="fa-solid fa-store text-[#8C6C47] mr-2"></i>Temel Bilgiler</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="col-span-1 md:col-span-2">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Restoran Adı</label>
+                        <input type="text" name="restaurant_name" value="{{ $settings['restaurant_name'] ?? 'Mikale' }}"
+                            class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-[#8C6C47] transition-all">
+                    </div>
+
+                    <div class="col-span-1 md:col-span-2">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Slogan (Karşılama Metni)</label>
+                        <input type="text" name="slogan"
+                            value="{{ $settings['slogan'] ?? 'Harika Tatlar, Güzel Anılar...' }}"
+                            placeholder="Örn: En taze kahveler, en güzel tatlılar..."
+                            class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-[#8C6C47] transition-all">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Para Birimi Sembolü</label>
+                        <select name="currency"
+                            class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-[#8C6C47] transition-all">
+                            <option value="₺" {{ ($settings['currency'] ?? '') == '₺' ? 'selected' : '' }}>₺ (TL)</option>
+                            <option value="$" {{ ($settings['currency'] ?? '') == '$' ? 'selected' : '' }}>$ (USD)</option>
+                            <option value="€" {{ ($settings['currency'] ?? '') == '€' ? 'selected' : '' }}>€ (EUR)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Müşteri Wi-Fi Şifresi</label>
+                        <input type="text" name="wifi_password" value="{{ $settings['wifi_password'] ?? '' }}"
+                            placeholder="Menüde gösterilecek..."
+                            class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-[#8C6C47] transition-all">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Telefon Numarası</label>
+                        <input type="text" name="phone" value="{{ $settings['phone'] ?? '' }}"
+                            class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-[#8C6C47] transition-all">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Çalışma Saatleri</label>
+                        <input type="text" name="working_hours" value="{{ $settings['working_hours'] ?? '' }}"
+                            placeholder="Örn: 09:00 - 23:00"
+                            class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-[#8C6C47] transition-all">
+                    </div>
+
+                    <div class="col-span-1 md:col-span-2">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Açık Adres</label>
+                        <textarea name="address" rows="2"
+                            class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-[#8C6C47] transition-all">{{ $settings['address'] ?? '' }}</textarea>
+                    </div>
+                </div>
+
+                <div class="mt-8 pt-4 border-t border-gray-100 flex justify-end">
+                    <button type="submit"
+                        class="bg-[#1C1C1C] hover:bg-[#8C6C47] text-white font-medium py-3 px-8 rounded-xl transition-colors shadow-md flex items-center gap-2">
+                        <i class="fa-solid fa-floppy-disk"></i> Değişiklikleri Kaydet
+                    </button>
+                </div>
             </div>
-
-            <nav class="space-y-3">
-                <a href="{{ url('/') }}" target="_blank"
-                    class="flex items-center gap-3 px-4 py-3 text-[#8C6C47] bg-amber-50 rounded-xl font-medium text-sm">
-                    <i class="fa-solid fa-arrow-up-right-from-square w-5 text-center"></i> Menüyü Görüntüle
-                </a>
-                <a href="{{ route('admin.dashboard') }}"
-                    class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-[#8C6C47] rounded-xl font-medium text-sm transition-all">
-                    <i class="fa-solid fa-chart-pie w-5 text-center"></i> Gösterge Paneli
-                </a>
-                <a href="{{ route('admin.categories') }}"
-                    class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-[#8C6C47] rounded-xl font-medium text-sm transition-all">
-                    <i class="fa-solid fa-layer-group w-5 text-center"></i> Kategoriler
-                </a>
-                <a href="{{ route('admin.products') }}"
-                    class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-[#8C6C47] rounded-xl font-medium text-sm transition-all">
-                    <i class="fa-solid fa-utensils w-5 text-center"></i> Ürünler
-                </a>
-                <a href="{{ route('admin.orders') }}"
-                    class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-[#8C6C47] rounded-xl font-medium text-sm transition-all">
-                    <i class="fa-solid fa-bell-concierge w-5 text-center"></i> Aktif Siparişler
-                </a>
-                <a href="{{ route('admin.settings') }}"
-                    class="flex items-center gap-3 px-4 py-3 text-white bg-[#8C6C47] rounded-xl shadow-md font-medium text-sm mt-4">
-                    <i class="fa-solid fa-gear w-5 text-center"></i> Ayarlar
-                </a>
-            </nav>
-        </div>
-
-        <div class="mt-4 border-t border-gray-100 pt-4">
-            <form action="{{ route('logout') }}" method="POST">
-                @csrf
-                <button type="submit"
-                    class="w-full flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 rounded-xl font-medium text-sm transition-all">
-                    <i class="fa-solid fa-arrow-right-from-bracket w-5 text-center"></i> Çıkış Yap
-                </button>
-            </form>
-        </div>
+        </form>
     </div>
-</div>
-
-</html>
+@endsection

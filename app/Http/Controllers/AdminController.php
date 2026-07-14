@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Setting;
 use Illuminate\Support\Facades\File;
+use App\Models\Table;
+use Illuminate\Support\Str;
 
 class AdminController extends Controller
 {
@@ -70,6 +73,30 @@ class AdminController extends Controller
         }
         $category->delete();
         return redirect()->back()->with('success', 'Kategori silindi!');
+    }
+
+    public function tables()
+    {
+        $tables = Table::orderBy('id', 'desc')->get();
+        return view('admin.tables', compact('tables'));
+    }
+
+    public function storeTable(Request $request)
+    {
+        $request->validate(['name' => 'required|string|max:255']);
+
+        Table::create([
+            'name' => $request->name,
+            'token' => Str::random(8)
+        ]);
+
+        return redirect()->back()->with('success', 'Masa başarıyla oluşturuldu.');
+    }
+
+    public function deleteTable($id)
+    {
+        Table::findOrFail($id)->delete();
+        return redirect()->back()->with('success', 'Masa silindi.');
     }
 
     public function products()
@@ -158,6 +185,43 @@ class AdminController extends Controller
 
     public function settings()
     {
-        return view('admin.settings');
+        $settings = Setting::pluck('value', 'key')->toArray();
+        return view('admin.settings', compact('settings'));
+    }
+
+    public function updateSettings(Request $request)
+    {
+        $textSettings = $request->except(['_token', 'logo', 'cover_image']);
+
+        foreach ($textSettings as $key => $value) {
+            Setting::updateOrCreate(
+                ['key' => $key],
+                ['value' => $value]
+            );
+        }
+
+        if ($request->hasFile('logo')) {
+            $oldLogo = Setting::where('key', 'logo')->value('value');
+            if ($oldLogo && File::exists(public_path($oldLogo))) {
+                File::delete(public_path($oldLogo));
+            }
+
+            $logoName = 'logo_' . time() . '.' . $request->logo->extension();
+            $request->logo->move(public_path('images/settings'), $logoName);
+            Setting::updateOrCreate(['key' => 'logo'], ['value' => 'images/settings/' . $logoName]);
+        }
+
+        if ($request->hasFile('cover_image')) {
+            $oldCover = Setting::where('key', 'cover_image')->value('value');
+            if ($oldCover && File::exists(public_path($oldCover))) {
+                File::delete(public_path($oldCover));
+            }
+
+            $coverName = 'cover_' . time() . '.' . $request->cover_image->extension();
+            $request->cover_image->move(public_path('images/settings'), $coverName);
+            Setting::updateOrCreate(['key' => 'cover_image'], ['value' => 'images/settings/' . $coverName]);
+        }
+
+        return redirect()->back()->with('success', 'Restoran bilgileri başarıyla güncellendi.');
     }
 }

@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 
-
 Route::get('/', function () {
     return view('welcome');
 });
@@ -15,7 +14,11 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
+
     Route::get('/', [AdminController::class, 'index'])->name('dashboard');
+
+    Route::get('/settings', [AdminController::class, 'settings'])->name('settings');
+    Route::post('/settings', [AdminController::class, 'updateSettings'])->name('settings.update');
 
     Route::get('/categories', [AdminController::class, 'categories'])->name('categories');
     Route::post('/categories/store', [AdminController::class, 'storeCategory'])->name('categories.store');
@@ -28,5 +31,8 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/products/delete/{id}', [AdminController::class, 'deleteProduct'])->name('products.delete');
 
     Route::get('/orders', [AdminController::class, 'orders'])->name('orders');
-    Route::get('/settings', [AdminController::class, 'settings'])->name('settings');
+
+    Route::get('/tables', [AdminController::class, 'tables'])->name('tables');
+    Route::post('/tables', [AdminController::class, 'storeTable'])->name('tables.store');
+    Route::delete('/tables/{id}', [AdminController::class, 'deleteTable'])->name('tables.delete');
 });
