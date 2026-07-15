@@ -191,7 +191,7 @@ class AdminController extends Controller
 
     public function updateSettings(Request $request)
     {
-        $textSettings = $request->except(['_token', 'logo', 'cover_image']);
+        $textSettings = $request->except(['_token', 'logo', 'cover_image', 'delete_logo', 'delete_cover_image']);
 
         foreach ($textSettings as $key => $value) {
             Setting::updateOrCreate(
@@ -200,7 +200,13 @@ class AdminController extends Controller
             );
         }
 
-        if ($request->hasFile('logo')) {
+        if ($request->input('delete_logo') == '1' && !$request->hasFile('logo')) {
+            $oldLogo = Setting::where('key', 'logo')->value('value');
+            if ($oldLogo && File::exists(public_path($oldLogo))) {
+                File::delete(public_path($oldLogo));
+            }
+            Setting::updateOrCreate(['key' => 'logo'], ['value' => '']);
+        } elseif ($request->hasFile('logo')) {
             $oldLogo = Setting::where('key', 'logo')->value('value');
             if ($oldLogo && File::exists(public_path($oldLogo))) {
                 File::delete(public_path($oldLogo));
@@ -211,7 +217,13 @@ class AdminController extends Controller
             Setting::updateOrCreate(['key' => 'logo'], ['value' => 'images/settings/' . $logoName]);
         }
 
-        if ($request->hasFile('cover_image')) {
+        if ($request->input('delete_cover_image') == '1' && !$request->hasFile('cover_image')) {
+            $oldCover = Setting::where('key', 'cover_image')->value('value');
+            if ($oldCover && File::exists(public_path($oldCover))) {
+                File::delete(public_path($oldCover));
+            }
+            Setting::updateOrCreate(['key' => 'cover_image'], ['value' => '']);
+        } elseif ($request->hasFile('cover_image')) {
             $oldCover = Setting::where('key', 'cover_image')->value('value');
             if ($oldCover && File::exists(public_path($oldCover))) {
                 File::delete(public_path($oldCover));
