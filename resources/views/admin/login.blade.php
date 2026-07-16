@@ -60,13 +60,6 @@
             <div class="text-center mb-8">
                 <div class="font-allison text-[4.5rem] sm:text-[6rem] text-[#1C1C1C] leading-none mb-2">M</div>
                 <h1 data-i18n="title" class="text-xl font-semibold text-gray-800 tracking-wide uppercase">Yönetim Paneli</h1>
-                <div class="mt-4 bg-red-50 border border-red-100 p-3 rounded-xl">
-                    <p class="text-xs text-red-600 font-semibold flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-triangle-exclamation"></i>
-                        <span data-i18n="warningTitle">Bu sayfa sadece adminler içindir!</span>
-                    </p>
-                    <p data-i18n="warningSubtitle" class="text-[10px] text-red-500 mt-1">Yetkisiz kişilerin bu panele girişi yasaktır.</p>
-                </div>
             </div>
 
             @if ($errors->any())
@@ -94,6 +87,9 @@
                     Giriş Yap
                 </button>
             </form>
+            <div class="text-center mt-6 pt-4 border-t border-gray-100 text-[10px] text-gray-400 font-semibold tracking-wider">
+                <a href="#" target="_blank" class="hover:text-[#8C6C47] transition-colors">MIKALE QR MENU SYSTEM</a> v1.0.0
+            </div>
         </div>
     </div>
 
@@ -155,11 +151,26 @@
 
         document.addEventListener("DOMContentLoaded", () => {
             const urlParams = new URLSearchParams(window.location.search);
-            let currentTable = '-';
-            if (urlParams.has('masa')) currentTable = urlParams.get('masa');
-            else if (urlParams.has('table')) currentTable = urlParams.get('table');
+            let tableToken = null;
+            if (urlParams.has('masa')) tableToken = urlParams.get('masa');
+            else if (urlParams.has('table')) tableToken = urlParams.get('table');
 
-            document.querySelectorAll('.current-table-display').forEach(el => el.innerText = currentTable);
+            if (tableToken) {
+                fetch(`/api/tables/${tableToken}`)
+                    .then(res => res.json())
+                    .then(result => {
+                        if (result && result.status === 'success') {
+                            document.querySelectorAll('.current-table-display').forEach(el => el.innerText = result.data.name);
+                        } else {
+                            document.querySelectorAll('.current-table-display').forEach(el => el.innerText = tableToken);
+                        }
+                    })
+                    .catch(() => {
+                        document.querySelectorAll('.current-table-display').forEach(el => el.innerText = tableToken);
+                    });
+            } else {
+                document.querySelectorAll('.current-table-display').forEach(el => el.innerText = '-');
+            }
             changeLanguage('tr');
         });
     </script>

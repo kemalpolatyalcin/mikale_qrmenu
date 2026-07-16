@@ -16,40 +16,43 @@
                     <i class="fa-solid fa-arrow-up-right-from-square w-5 text-center"></i> Menüyü Görüntüle
                 </a>
                 <a href="{{ route('admin.dashboard') }}"
-                    class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-[#8C6C47] rounded-xl font-medium text-sm transition-all">
+                    class="flex items-center gap-3 px-4 py-3 {{ request()->routeIs('admin.dashboard') ? 'bg-[#8C6C47] text-white shadow-md' : 'text-gray-600 hover:bg-gray-50 hover:text-[#8C6C47]' }} rounded-xl font-medium text-sm transition-all">
                     <i class="fa-solid fa-chart-pie w-5 text-center"></i> Gösterge Paneli
                 </a>
                 <a href="{{ route('admin.categories') }}"
-                    class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-[#8C6C47] rounded-xl font-medium text-sm transition-all">
+                    class="flex items-center gap-3 px-4 py-3 {{ request()->routeIs('admin.categories') ? 'bg-[#8C6C47] text-white shadow-md' : 'text-gray-600 hover:bg-gray-50 hover:text-[#8C6C47]' }} rounded-xl font-medium text-sm transition-all">
                     <i class="fa-solid fa-layer-group w-5 text-center"></i> Kategoriler
                 </a>
                 <a href="{{ route('admin.products') }}"
-                    class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-[#8C6C47] rounded-xl font-medium text-sm transition-all">
+                    class="flex items-center gap-3 px-4 py-3 {{ request()->routeIs('admin.products') ? 'bg-[#8C6C47] text-white shadow-md' : 'text-gray-600 hover:bg-gray-50 hover:text-[#8C6C47]' }} rounded-xl font-medium text-sm transition-all">
                     <i class="fa-solid fa-utensils w-5 text-center"></i> Ürünler
                 </a>
                 <a href="{{ route('admin.orders') }}"
-                    class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-[#8C6C47] rounded-xl font-medium text-sm transition-all">
+                    class="flex items-center gap-3 px-4 py-3 {{ request()->routeIs('admin.orders') ? 'bg-[#8C6C47] text-white shadow-md' : 'text-gray-600 hover:bg-gray-50 hover:text-[#8C6C47]' }} rounded-xl font-medium text-sm transition-all">
                     <i class="fa-solid fa-bell-concierge w-5 text-center"></i> Aktif Siparişler
                 </a>
                 <a href="{{ route('admin.tables') }}"
-                    class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-[#8C6C47] rounded-xl font-medium text-sm transition-all">
+                    class="flex items-center gap-3 px-4 py-3 {{ request()->routeIs('admin.tables') ? 'bg-[#8C6C47] text-white shadow-md' : 'text-gray-600 hover:bg-gray-50 hover:text-[#8C6C47]' }} rounded-xl font-medium text-sm transition-all">
                     <i class="fa-solid fa-qrcode w-5 text-center"></i> Masalar ve QR
                 </a>
                 <a href="{{ route('admin.settings') }}"
-                    class="flex items-center gap-3 px-4 py-3 text-white bg-[#8C6C47] rounded-xl shadow-md font-medium text-sm mt-4">
+                    class="flex items-center gap-3 px-4 py-3 {{ request()->routeIs('admin.settings') ? 'bg-[#8C6C47] text-white shadow-md mt-4' : 'text-gray-600 hover:bg-gray-50 hover:text-[#8C6C47] mt-4' }} rounded-xl font-medium text-sm transition-all">
                     <i class="fa-solid fa-gear w-5 text-center"></i> Ayarlar
                 </a>
             </nav>
         </div>
 
         <div class="mt-4 border-t border-gray-100 pt-4">
-            <form action="{{ route('logout') }}" method="POST">
+            <form action="{{ route('logout') }}" method="POST" class="mb-4">
                 @csrf
                 <button type="submit"
                     class="w-full flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 rounded-xl font-medium text-sm transition-all">
                     <i class="fa-solid fa-arrow-right-from-bracket w-5 text-center"></i> Çıkış Yap
                 </button>
             </form>
+            <div class="text-center text-[9px] text-gray-400 font-medium tracking-wide">
+                Powered by <strong class="text-gray-600">Mikale QR Menu</strong>
+            </div>
         </div>
     </div>
 </div>

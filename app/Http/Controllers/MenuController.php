@@ -24,4 +24,13 @@ class MenuController extends Controller
     {
         return response()->json(['status' => 'success', 'data' => ['name' => 'Kemal Polat']]);
     }
+
+    public function getTable($token)
+    {
+        $table = \App\Models\Table::where('token', $token)->first();
+        if ($table) {
+            return response()->json(['status' => 'success', 'data' => ['name' => $table->name]]);
+        }
+        return response()->json(['status' => 'error', 'message' => 'Table not found'], 404);
+    }
 }

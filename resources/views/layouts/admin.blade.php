@@ -49,6 +49,7 @@
                 <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">Yönetim Paneli</span>
             </div>
 
+            @if(!request()->routeIs('admin.settings') && !request()->routeIs('admin.tables'))
             <div class="flex items-center gap-3">
                 <a href="{{ url('/') }}" target="_blank"
                     class="bg-amber-50 hover:bg-amber-100 text-[#8C6C47] font-semibold text-xs px-4 py-2.5 rounded-xl border border-amber-100 transition-colors flex items-center gap-2">
@@ -74,6 +75,7 @@
                     </button>
                 </form>
             </div>
+            @endif
         </header>
 
         <main class="flex-1 w-full overflow-y-auto p-4 md:p-8 no-scrollbar relative">

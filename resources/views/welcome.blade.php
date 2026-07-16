@@ -140,8 +140,8 @@
                 bottom: 0;
                 left: 0;
                 width: 100%;
-                height: 85vh;
-                border-radius: 1.5rem 1.5rem 0 0;
+                height: 100%;
+                border-radius: 0;
                 transform: translateY(100%);
                 transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
             }
@@ -248,7 +248,7 @@
             </div>
         </header>
 
-        <main class="flex-1 overflow-y-auto pb-24 md:pb-8 no-scrollbar bg-brand-bg">
+        <main class="flex-1 overflow-y-auto no-scrollbar bg-brand-bg">
 
             <div id="view-home" class="page-view active w-full h-full relative">
                 <div class="relative w-full h-[420px] md:h-[60vh] rounded-b-[2rem] overflow-hidden">
@@ -310,9 +310,60 @@
                             data-i18n="navSearchBtn">Menü</button>
                     </div>
                 </div>
+
+                <footer class="w-full bg-[#151515] text-gray-400 pt-12 pb-24 md:pb-12 px-6 mt-12 border-t border-white/5">
+                    <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-center md:justify-start gap-2">
+                                @if(isset($siteSettings['logo']) && $siteSettings['logo'] != '')
+                                    <img src="{{ asset($siteSettings['logo']) }}" class="h-8 object-contain" alt="Logo">
+                                @else
+                                    <div class="font-allison text-4xl text-white leading-none pt-1">
+                                        {{ substr($siteSettings['restaurant_name'] ?? 'M', 0, 1) }}</div>
+                                @endif
+                                <span class="font-serif font-bold text-lg text-white tracking-widest">{{ $siteSettings['restaurant_name'] ?? '' }}</span>
+                            </div>
+                            <p class="text-xs text-gray-500 leading-relaxed font-light">
+                                Gelenekten ilham alan lezzetleri modern bir dokunuşla sunuyor, her ziyareti özel bir anıya dönüştürüyoruz.
+                            </p>
+                            <div class="flex items-center justify-center md:justify-start gap-4 text-white text-base">
+                                <a href="#" class="hover:text-amber-500 transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                                <a href="#" class="hover:text-amber-500 transition-colors"><i class="fa-brands fa-facebook"></i></a>
+                                <a href="#" class="hover:text-amber-500 transition-colors"><i class="fa-brands fa-twitter"></i></a>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3">
+                            <h4 class="text-white text-xs font-semibold tracking-widest uppercase">Çalışma Saatleri</h4>
+                            <ul class="text-xs space-y-1.5 font-light text-gray-500">
+                                <li>Pazartesi - Cuma: 09:00 - 23:00</li>
+                                <li>Cumartesi - Pazar: 09:00 - 00:00</li>
+                            </ul>
+                        </div>
+
+                        <div class="space-y-3">
+                            <h4 class="text-white text-xs font-semibold tracking-widest uppercase">İletişim & Adres</h4>
+                            <p class="text-xs text-gray-500 leading-relaxed font-light">
+                                Atatürk Cad. No: 123, Merkez
+                            </p>
+                            @if(isset($siteSettings['wifi_password']) && $siteSettings['wifi_password'] != '')
+                                <p class="text-xs text-gray-500 font-light flex items-center justify-center md:justify-start gap-1">
+                                    <i class="fa-solid fa-wifi text-amber-500/80"></i> Wi-Fi: <strong class="text-gray-400">{{ $siteSettings['wifi_password'] }}</strong>
+                                </p>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="w-full h-px bg-white/5 my-8 max-w-5xl mx-auto"></div>
+                    <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between text-[10px] text-gray-600 gap-4">
+                        <p>&copy; {{ date('Y') }} {{ $siteSettings['restaurant_name'] ?? '' }}. Tüm hakları saklıdır.</p>
+                        <p class="uppercase font-semibold tracking-wider">
+                            Powered by <a href="#" target="_blank" class="hover:text-amber-600 transition-colors text-gray-400">Mikale QR Menu</a>
+                        </p>
+                    </div>
+                </footer>
             </div>
 
-            <div id="view-search" class="page-view px-6 py-4 md:py-8">
+            <div id="view-search" class="page-view px-6 pt-4 pb-28 md:pb-12">
 
                 @if(isset($siteSettings['wifi_password']) && $siteSettings['wifi_password'] != '')
                     <div class="max-w-2xl mx-auto mb-4 text-center">
@@ -349,6 +400,9 @@
                         <div class="flex overflow-x-auto no-scrollbar gap-2 pb-2" id="category-tabs"></div>
                     </div>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6" id="products-grid"></div>
+                </div>
+                <div class="text-center pt-8 pb-12 text-[10px] text-gray-400 font-medium tracking-wider select-none uppercase">
+                    Powered by <a href="#" target="_blank" class="hover:text-amber-600 transition-colors font-bold">Mikale QR Menu</a>
                 </div>
             </div>
 
@@ -461,10 +515,26 @@
 
         document.addEventListener("DOMContentLoaded", () => {
             const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.has('masa')) currentTable = urlParams.get('masa');
-            else if (urlParams.has('table')) currentTable = urlParams.get('table');
+            let tableToken = null;
+            if (urlParams.has('masa')) tableToken = urlParams.get('masa');
+            else if (urlParams.has('table')) tableToken = urlParams.get('table');
 
-            document.querySelectorAll('.current-table-display').forEach(el => el.innerText = currentTable);
+            if (tableToken) {
+                fetch(`/api/tables/${tableToken}`)
+                    .then(res => res.json())
+                    .then(result => {
+                        if (result && result.status === 'success') {
+                            document.querySelectorAll('.current-table-display').forEach(el => el.innerText = result.data.name);
+                        } else {
+                            document.querySelectorAll('.current-table-display').forEach(el => el.innerText = tableToken);
+                        }
+                    })
+                    .catch(() => {
+                        document.querySelectorAll('.current-table-display').forEach(el => el.innerText = tableToken);
+                    });
+            } else {
+                document.querySelectorAll('.current-table-display').forEach(el => el.innerText = '-');
+            }
             changeLanguage('tr');
 
             const minSplashTime = new Promise(resolve => setTimeout(resolve, 1500));

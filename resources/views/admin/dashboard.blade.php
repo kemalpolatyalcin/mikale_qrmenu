@@ -97,68 +97,15 @@
                     </div>
                 </div>
 
-            </div>
-
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center mt-8">
                 <i class="fa-solid fa-wand-magic-sparkles text-4xl text-gray-300 mb-4"></i>
                 <h3 class="text-lg font-semibold text-gray-800 mb-2">Sistem Başarıyla Kuruldu</h3>
-                <p class="text-gray-500 text-sm max-w-md mx-auto">Sol taraftaki menüyü kullanarak restoranınızın
-                    kategorilerini, ürünlerini ve ayarlarını yönetmeye başlayabilirsiniz.</p>
+                <p class="text-gray-500 text-sm max-w-md mx-auto">Sol taraftaki menüyü kullanarak restoranınızın kategorilerini, ürünlerini ve ayarlarını yönetmeye başlayabilirsiniz.</p>
             </div>
         </div>
     </main>
 
-    <div id="mobile-admin-menu"
-        class="fixed inset-0 z-50 transform translate-x-full transition-transform duration-300 md:hidden">
-        <div class="absolute inset-0 bg-black/50"
-            onclick="document.getElementById('mobile-admin-menu').classList.add('translate-x-full')"></div>
-        <div class="absolute top-0 right-0 w-64 h-full bg-white shadow-xl flex flex-col justify-between py-6 px-4">
-            <div>
-                <div class="flex justify-between items-center mb-8 px-2 border-b border-gray-100 pb-4">
-                    <span class="font-serif text-xl font-bold tracking-widest text-[#1C1C1C]">MIKALE</span>
-                    <button onclick="document.getElementById('mobile-admin-menu').classList.add('translate-x-full')"
-                        class="text-gray-500 text-xl focus:outline-none"><i class="fa-solid fa-xmark"></i></button>
-                </div>
-
-                <nav class="space-y-3">
-                    <a href="{{ url('/') }}" target="_blank"
-                        class="flex items-center gap-3 px-4 py-3 text-[#8C6C47] bg-amber-50 rounded-xl font-medium text-sm">
-                        <i class="fa-solid fa-arrow-up-right-from-square w-5 text-center"></i> Menüyü Görüntüle
-                    </a>
-                    <a href="{{ route('admin.dashboard') }}"
-                        class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-[#8C6C47] rounded-xl font-medium text-sm transition-all">
-                        <i class="fa-solid fa-chart-pie w-5 text-center"></i> Gösterge Paneli
-                    </a>
-                    <a href="{{ route('admin.categories') }}"
-                        class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-[#8C6C47] rounded-xl font-medium text-sm transition-all">
-                        <i class="fa-solid fa-layer-group w-5 text-center"></i> Kategoriler
-                    </a>
-                    <a href="{{ route('admin.products') }}"
-                        class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-[#8C6C47] rounded-xl font-medium text-sm transition-all">
-                        <i class="fa-solid fa-utensils w-5 text-center"></i> Ürünler
-                    </a>
-                    <a href="{{ route('admin.orders') }}"
-                        class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-[#8C6C47] rounded-xl font-medium text-sm transition-all">
-                        <i class="fa-solid fa-bell-concierge w-5 text-center"></i> Aktif Siparişler
-                    </a>
-                    <a href="{{ route('admin.settings') }}"
-                        class="flex items-center gap-3 px-4 py-3 text-white bg-[#8C6C47] rounded-xl shadow-md font-medium text-sm mt-4">
-                        <i class="fa-solid fa-gear w-5 text-center"></i> Ayarlar
-                    </a>
-                </nav>
-            </div>
-
-            <div class="mt-4 border-t border-gray-100 pt-4">
-                <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-                    <button type="submit"
-                        class="w-full flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 rounded-xl font-medium text-sm transition-all">
-                        <i class="fa-solid fa-arrow-right-from-bracket w-5 text-center"></i> Çıkış Yap
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
+    @include('admin.partials.mobile-menu')
 
 </body>
 </html>
